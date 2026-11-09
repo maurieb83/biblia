@@ -165,6 +165,69 @@ table {
 <!--<button type="button" class="btn btn-dark" onclick="cambiarModo()"><FONT COLOR="">Oscuro / Claro</FONT></button>
 <!-----------------------------------End MODE: Oscuro / Claro-------------------------------------->
 <h3>- Índice -</h3>
+
+
+
+<div id="buscador-libros" style="max-width:700px;margin:16px auto;padding:0 16px">
+  <input
+    id="buscar-libro"
+    type="search"
+    placeholder="Buscar un libro (ej.: Juan, Tobías, Salmos)"
+    autocomplete="off"
+    style="width:100%;padding:12px;font-size:16px"
+  >
+  <div id="resultados-libros" style="margin-top:8px"></div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const campo = document.getElementById("buscar-libro");
+  const resultados = document.getElementById("resultados-libros");
+
+  const normalizar = texto =>
+    texto.normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .toLowerCase()
+      .trim();
+
+  // Del índice, conserva enlaces con letras y descarta los capítulos numéricos.
+  const enlacesLibros = [...document.querySelectorAll("a")].filter(enlace => {
+    const nombre = enlace.textContent.trim();
+    return /[a-záéíóúñ]/i.test(nombre) && !/^\d+\.?$/.test(nombre);
+  });
+
+  campo.addEventListener("input", () => {
+    resultados.replaceChildren();
+
+    const consulta = normalizar(campo.value);
+    if (!consulta) return;
+
+    const encontrados = enlacesLibros.filter(enlace =>
+      normalizar(enlace.textContent).includes(consulta)
+    );
+
+    if (!encontrados.length) {
+      resultados.textContent = "No se encontró ese libro.";
+      return;
+    }
+
+    encontrados.forEach(enlaceOriginal => {
+      const enlace = document.createElement("a");
+      enlace.href = enlaceOriginal.href;
+      enlace.textContent = enlaceOriginal.textContent.trim();
+      enlace.style.cssText =
+        "display:block;padding:9px 12px;margin:4px 0;background:#f2f2f2;border-radius:6px;text-decoration:none;color:inherit";
+      resultados.appendChild(enlace);
+    });
+  });
+});
+</script>
+
+
+
+
+
+
 <!--<script src="random.js"></script>-->
 <script>
 function at() {
