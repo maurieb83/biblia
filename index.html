@@ -2,675 +2,506 @@
 <html lang="es">
 <head>
 <title>BIBLIA - El libro del pueblo de Dios</title>
-    <meta content="Santa Biblia Católica" name="description">
+<meta content="Santa Biblia Católica" name="description">
 <meta charset="utf-8">
-<link  rel="icon" href="JC.jpg" type="image/png" />
+<link rel="icon" href="JC.jpg" type="image/png" />
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<!-- Google Fonts para un diseño moderno y limpio -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --primary-color: #0066cc;
+        --bg-color: #f4f7f6;
+        --card-bg: #ffffff;
+        --text-color: #333333;
+        --border-color: #e0e0e0;
+    }
+
+    body {
+        font-family: 'Inter', sans-serif;
+        background-color: var(--bg-color);
+        color: var(--text-color);
+        margin: 0;
+        padding: 0;
+        -webkit-font-smoothing: antialiased;
+    }
+
+    /* Pantalla de carga ligera */
+    #pre-load-web {
+        width: 100%;
+        height: 100vh;
+        position: fixed;
+        background: #ffffff;
+        left: 0px;
+        top: 0px;
+        z-index: 100000;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+    }
+    #imagen-load {
+        text-align: center;
+        font-weight: 500;
+        color: #555;
+    }
+
+    header {
+        background: linear-gradient(135deg, #0056b3, #0088ff);
+        color: white;
+        text-align: center;
+        padding: 2.5rem 1rem 1.5rem 1rem;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        border-bottom-left-radius: 20px;
+        border-bottom-right-radius: 20px;
+    }
+
+    header h1 {
+        margin: 0 0 5px 0;
+        font-size: 1.8rem;
+        font-weight: 700;
+        letter-spacing: -0.5px;
+    }
+
+    header p {
+        margin: 5px 0 15px 0;
+        opacity: 0.9;
+        font-size: 0.95rem;
+    }
+
+    .main-container {
+        max-width: 1100px;
+        margin: 20px auto;
+        padding: 0 15px;
+    }
+
+    /* Barra de Búsqueda Moderna */
+    .search-box-container {
+        margin: -20px auto 20px auto;
+        max-width: 600px;
+        padding: 0 15px;
+        position: relative;
+        z-index: 10;
+    }
+
+    .search-input {
+        width: 100%;
+        padding: 14px 20px;
+        font-size: 1rem;
+        border: 2px solid var(--border-color);
+        border-radius: 30px;
+        outline: none;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        background: white;
+        transition: all 0.3s ease;
+        box-sizing: border-box;
+    }
+
+    .search-input:focus {
+        border-color: var(--primary-color);
+        box-shadow: 0 4px 20px rgba(0,102,204,0.15);
+    }
+
+    /* Botones de selección rápida y aleatoria */
+    .actions-bar {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-bottom: 25px;
+    }
+
+    .btn-action {
+        background: white;
+        border: 1px solid var(--border-color);
+        padding: 8px 16px;
+        border-radius: 20px;
+        font-weight: 600;
+        font-size: 0.85rem;
+        cursor: pointer;
+        transition: all 0.2s;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+    }
+
+    .btn-action:hover {
+        background: var(--primary-color);
+        color: white;
+        border-color: var(--primary-color);
+    }
+
+    .btn-special {
+        background: #ffaa00;
+        color: #000;
+        border: none;
+    }
+
+    /* Estructura en Tarjetas (Grid) */
+    .grid-testaments {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+    }
+
+    @media (max-width: 768px) {
+        .grid-testaments {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    .card {
+        background: var(--card-bg);
+        border-radius: 16px;
+        padding: 20px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+        border: 1px solid rgba(0,0,0,0.04);
+        margin-bottom: 20px;
+    }
+
+    .card h2 {
+        font-size: 1.2rem;
+        margin-top: 0;
+        padding-bottom: 10px;
+        border-bottom: 2px solid var(--border-color);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .book-item {
+        margin: 14px 0;
+        padding-bottom: 10px;
+        border-bottom: 1px dashed #eee;
+    }
+
+    .book-name {
+        font-weight: 600;
+        color: #1a1a1a;
+        text-decoration: none;
+        display: inline-block;
+        margin-bottom: 6px;
+        font-size: 0.95rem;
+        transition: color 0.2s;
+    }
+
+    .book-name:hover {
+        color: var(--primary-color);
+    }
+
+    .chapters-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 4px;
+    }
+
+    .chapters-list a {
+        background: #f0f4f8;
+        color: #333;
+        padding: 2px 7px;
+        border-radius: 6px;
+        font-size: 0.75rem;
+        text-decoration: none;
+        font-weight: 500;
+        transition: background 0.2s, color 0.2s;
+    }
+
+    .chapters-list a:hover {
+        background: var(--primary-color);
+        color: white;
+    }
+
+    /* Panel Lateral / Reflexión */
+    .sidebar-card {
+        background: white;
+        border-radius: 16px;
+        padding: 20px;
+        text-align: center;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+        margin-top: 20px;
+    }
+
+    .sidebar-card img {
+        border-radius: 12px;
+        max-width: 100%;
+        height: auto;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    /* Modo Oscuro */
+    body.oscuro {
+        --bg-color: #121212;
+        --card-bg: #1e1e1e;
+        --text-color: #e0e0e0;
+        --border-color: #2c2c2c;
+    }
+    body.oscuro .book-name { color: #f1eded; }
+    body.oscuro .chapters-list a { background: #2a2a2a; color: #ddd; }
+    body.oscuro .search-input { background: #1e1e1e; color: white; border-color: #333; }
+    body.oscuro #pre-load-web { background: #121212; color: white; }
+
+    /* Botón flotante B/N */
+    .btn-float {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background: #333;
+        color: white;
+        border: none;
+        padding: 10px 16px;
+        border-radius: 50px;
+        font-weight: bold;
+        cursor: pointer;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        z-index: 999;
+    }
+
+    footer {
+        text-align: center;
+        padding: 30px 0;
+        font-size: 0.85rem;
+        opacity: 0.7;
+    }
+    
+    footer a { color: inherit; text-decoration: underline; }
+</style>
+
+<!-- Scripts de Precarga y Funciones de Lectura Aleatoria -->
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js"></script>
+<script>
+    $(document).ready(function(){
+        $("body").css({"overflow-y":"hidden"});
+        var alto = $(window).height();
+        $("body").append("<div id='pre-load-web'><div id='imagen-load'><img src='JC.jpg' width='65' height='65' style='border-radius:50%;'/><br /><br />Cargando Biblia...</div></div>");
+        $("#pre-load-web").css({height: alto + "px"});
+    }); 
+
+    $(window).load(function(){
+       $("#pre-load-web").fadeOut(500, function() { 
+           $(this).remove();
+           $("body").css({"overflow-y":"auto"}); 
+       });        
+    });
+</script>
 </head>
 <body>
-        <style>
+
+<div id="pre-load-web">
+    <div id="imagen-load">
+        <img src='JC.jpg' width='65' height='65' style='border-radius:50%;'/><br /><br />Cargando Biblia...
+    </div>
+</div>
+
+<header>
+    <h1>BIBLIA</h1>
+    <p>El libro del pueblo de Dios</p>
+    <a href="https://es.wikipedia.org/wiki/Carlo_Acutis" target="_blank" style="color: white; text-decoration: underline; font-size: 0.85rem;">
+        <i>En homenaje a mi amigo Carlo Acutis</i>
+    </a>
+</header>
+
+<!-- BARRA DE BÚSQUEDA DE LIBROS EN TIEMPO REAL -->
+<div class="search-box-container">
+    <input type="text" id="searchInput" class="search-input" placeholder="🔍 Buscar libro (ej. Génesis, Mateo, Salmos)..." onkeyup="filtrarLibros()">
+</div>
+
+<div class="main-container">
+    <!-- Acciones Rápidas -->
+    <div class="actions-bar">
+        <button class="btn-action btn-special" onclick="mialerta();">⭐ Confiar en Jesús</button>
+        <button class="btn-action" onclick="at()">📖 Antiguo (Aleatorio)</button>
+        <button class="btn-action" onclick="nt()">📖 Nuevo (Aleatorio)</button>
+        <button class="btn-action" onclick="window.location.href='donar.html'">❤️ Donar (BONAR)</button>
+    </div>
+
+    <!-- Contenedor Principal en Cuadrícula -->
+    <div class="grid-testaments">
+        
+        <!-- ANTIGUO TESTAMENTO -->
+        <div class="card" id="card-at">
+            <h2 style="color: #d97706;">📜 Antiguo Testamento</h2>
             
-            #pre-load-web {width:100%;position:absolute;background:#fff;left:0px;top:0px;z-index:100000}
-            /*aqui centramos la imagen si coloco margin left -30 es por que la imagen mide 60 */
-            #pre-load-web #imagen-load{left:50%;margin-left:-30px;position:absolute}
+            <div class="book-item" data-title="genesis">
+                <a href="genesis" class="book-name">GENESIS</a>
+                <div class="chapters-list">
+                    <a href="genesis/1.html">1</a> <a href="genesis/2.html">2</a> <a href="genesis/3.html">3</a> <a href="genesis/4.html">4</a> <a href="genesis/5.html">5</a> <a href="genesis/6.html">6</a> <a href="genesis/7.html">7</a> <a href="genesis/8.html">8</a> <a href="genesis/9.html">9</a> <a href="genesis/10.html">10</a> <a href="genesis/11.html">11</a> <a href="genesis/12.html">12</a> <a href="genesis/13.html">13</a> <a href="genesis/14.html">14</a> <a href="genesis/15.html">15</a> <a href="genesis/16.html">16</a> <a href="genesis/17.html">17</a> <a href="genesis/18.html">18</a> <a href="genesis/19.html">19</a> <a href="genesis/20.html">20</a> <a href="genesis/21.html">21</a> <a href="genesis/22.html">22</a> <a href="genesis/23.html">23</a> <a href="genesis/24.html">24</a> <a href="genesis/25.html">25</a> <a href="genesis/26.html">26</a> <a href="genesis/27.html">27</a> <a href="genesis/28.html">28</a> <a href="genesis/29.html">29</a> <a href="genesis/30.html">30</a> <a href="genesis/31.html">31</a> <a href="genesis/32.html">32</a> <a href="genesis/33.html">33</a> <a href="genesis/34.html">34</a> <a href="genesis/35.html">35</a> <a href="genesis/36.html">36</a> <a href="genesis/37.html">37</a> <a href="genesis/38.html">38</a> <a href="genesis/39.html">39</a> <a href="genesis/40.html">40</a> <a href="genesis/41.html">41</a> <a href="genesis/42.html">42</a> <a href="genesis/43.html">43</a> <a href="genesis/44.html">44</a> <a href="genesis/45.html">45</a> <a href="genesis/46.html">46</a> <a href="genesis/47.html">47</a> <a href="genesis/48.html">48</a> <a href="genesis/49.html">49</a> <a href="genesis/50.html">50</a>
+                </div>
+            </div>
+
+            <div class="book-item" data-title="exodo">
+                <a href="exodo" class="book-name">EXODO</a>
+                <div class="chapters-list">
+                    <a href="exodo/1.html">1</a> <a href="exodo/2.html">2</a> <a href="exodo/3.html">3</a> <a href="exodo/4.html">4</a> <a href="exodo/5.html">5</a> <a href="exodo/6.html">6</a> <a href="exodo/7.html">7</a> <a href="exodo/8.html">8</a> <a href="exodo/9.html">9</a> <a href="exodo/10.html">10</a> <a href="exodo/11.html">11</a> <a href="exodo/12.html">12</a> <a href="exodo/13.html">13</a> <a href="exodo/14.html">14</a> <a href="exodo/15.html">15</a> <a href="exodo/16.html">16</a> <a href="exodo/17.html">17</a> <a href="exodo/18.html">18</a> <a href="exodo/19.html">19</a> <a href="exodo/20.html">20</a> <a href="exodo/21.html">21</a> <a href="exodo/22.html">22</a> <a href="exodo/23.html">23</a> <a href="exodo/24.html">24</a> <a href="exodo/25.html">25</a> <a href="exodo/26.html">26</a> <a href="exodo/27.html">27</a> <a href="exodo/28.html">28</a> <a href="exodo/29.html">29</a> <a href="exodo/30.html">30</a> <a href="exodo/31.html">31</a> <a href="exodo/32.html">32</a> <a href="exodo/33.html">33</a> <a href="exodo/34.html">34</a> <a href="exodo/35.html">35</a> <a href="exodo/36.html">36</a> <a href="exodo/37.html">37</a> <a href="exodo/38.html">38</a> <a href="exodo/39.html">39</a> <a href="exodo/40.html">40</a>
+                </div>
+            </div>
+
+            <div class="book-item" data-title="levitico">
+                <a href="levitico" class="book-name">LEVITICO</a>
+                <div class="chapters-list">
+                    <a href="levitico/1.html">1</a> <a href="levitico/2.html">2</a> <a href="levitico/3.html">3</a> <a href="levitico/4.html">4</a> <a href="levitico/5.html">5</a> <a href="levitico/6.html">6</a> <a href="levitico/7.html">7</a> <a href="levitico/8.html">8</a> <a href="levitico/9.html">9</a> <a href="levitico/10.html">10</a> <a href="levitico/11.html">11</a> <a href="levitico/12.html">12</a> <a href="levitico/13.html">13</a> <a href="levitico/14.html">14</a> <a href="levitico/15.html">15</a> <a href="levitico/16.html">16</a> <a href="levitico/17.html">17</a> <a href="levitico/18.html">18</a> <a href="levitico/19.html">19</a> <a href="levitico/20.html">20</a> <a href="levitico/21.html">21</a> <a href="levitico/22.html">22</a> <a href="levitico/23.html">23</a> <a href="levitico/24.html">24</a> <a href="levitico/25.html">25</a> <a href="levitico/26.html">26</a> <a href="levitico/27.html">27</a>
+                </div>
+            </div>
+
+            <div class="book-item" data-title="numeros">
+                <a href="numeros" class="book-name">NUMEROS</a>
+                <div class="chapters-list">
+                    <a href="numeros/1.html">1</a> <a href="numeros/2.html">2</a> <a href="numeros/3.html">3</a> <a href="numeros/4.html">4</a> <a href="numeros/5.html">5</a> <a href="numeros/6.html">6</a> <a href="numeros/7.html">7</a> <a href="numeros/8.html">8</a> <a href="numeros/9.html">9</a> <a href="numeros/10.html">10</a> <a href="numeros/11.html">11</a> <a href="numeros/12.html">12</a> <a href="numeros/13.html">13</a> <a href="numeros/14.html">14</a> <a href="numeros/15.html">15</a> <a href="numeros/16.html">16</a> <a href="numeros/17.html">17</a> <a href="numeros/18.html">18</a> <a href="numeros/19.html">19</a> <a href="numeros/20.html">20</a> <a href="numeros/21.html">21</a> <a href="numeros/22.html">22</a> <a href="numeros/23.html">23</a> <a href="numeros/24.html">24</a> <a href="numeros/25.html">25</a> <a href="numeros/26.html">26</a> <a href="numeros/27.html">27</a> <a href="numeros/28.html">28</a> <a href="numeros/29.html">29</a> <a href="numeros/30.html">30</a> <a href="numeros/31.html">31</a> <a href="numeros/32.html">32</a> <a href="numeros/33.html">33</a> <a href="numeros/34.html">34</a> <a href="numeros/35.html">35</a> <a href="numeros/36.html">36</a>
+                </div>
+            </div>
+
+            <div class="book-item" data-title="deuteronomio">
+                <a href="deuteronomio" class="book-name">DEUTERONOMIO</a>
+                <div class="chapters-list">
+                    <a href="deuteronomio/1.html">1</a> <a href="deuteronomio/2.html">2</a> <a href="deuteronomio/3.html">3</a> <a href="deuteronomio/4.html">4</a> <a href="deuteronomio/5.html">5</a> <a href="deuteronomio/6.html">6</a> <a href="deuteronomio/7.html">7</a> <a href="deuteronomio/8.html">8</a> <a href="deuteronomio/9.html">9</a> <a href="deuteronomio/10.html">10</a> <a href="deuteronomio/11.html">11</a> <a href="deuteronomio/12.html">12</a> <a href="deuteronomio/13.html">13</a> <a href="deuteronomio/14.html">14</a> <a href="deuteronomio/15.html">15</a> <a href="deuteronomio/16.html">16</a> <a href="deuteronomio/17.html">17</a> <a href="deuteronomio/18.html">18</a> <a href="deuteronomio/19.html">19</a> <a href="deuteronomio/20.html">20</a> <a href="deuteronomio/21.html">21</a> <a href="deuteronomio/22.html">22</a> <a href="deuteronomio/23.html">23</a> <a href="deuteronomio/24.html">24</a> <a href="deuteronomio/25.html">25</a> <a href="deuteronomio/26.html">26</a> <a href="deuteronomio/27.html">27</a> <a href="deuteronomio/28.html">28</a> <a href="deuteronomio/29.html">29</a> <a href="deuteronomio/30.html">30</a> <a href="deuteronomio/31.html">31</a> <a href="deuteronomio/32.html">32</a> <a href="deuteronomio/33.html">33</a> <a href="deuteronomio/34.html">34</a>
+                </div>
+            </div>
+
+            <div class="book-item" data-title="josue">
+                <a href="josue" class="book-name">JOSUE</a>
+                <div class="chapters-list">
+                    <a href="josue/1.html">1</a> <a href="josue/2.html">2</a> <a href="josue/3.html">3</a> <a href="josue/4.html">4</a> <a href="josue/5.html">5</a> <a href="josue/6.html">6</a> <a href="josue/7.html">7</a> <a href="josue/8.html">8</a> <a href="josue/9.html">9</a> <a href="josue/10.html">10</a> <a href="josue/11.html">11</a> <a href="josue/12.html">12</a> <a href="josue/13.html">13</a> <a href="josue/14.html">14</a> <a href="josue/15.html">15</a> <a href="josue/16.html">16</a> <a href="josue/17.html">17</a> <a href="josue/18.html">18</a> <a href="josue/19.html">19</a> <a href="josue/20.html">20</a> <a href="josue/21.html">21</a> <a href="josue/22.html">22</a> <a href="josue/23.html">23</a> <a href="josue/24.html">24</a>
+                </div>
+            </div>
+
+            <div class="book-item" data-title="jueces">
+                <a href="jueces" class="book-name">JUECES</a>
+                <div class="chapters-list">
+                    <a href="jueces/1.html">1</a> <a href="jueces/2.html">2</a> <a href="jueces/3.html">3</a> <a href="jueces/4.html">4</a> <a href="jueces/5.html">5</a> <a href="jueces/6.html">6</a> <a href="jueces/7.html">7</a> <a href="jueces/8.html">8</a> <a href="jueces/9.html">9</a> <a href="jueces/10.html">10</a> <a href="jueces/11.html">11</a> <a href="jueces/12.html">12</a> <a href="jueces/13.html">13</a> <a href="jueces/14.html">14</a> <a href="jueces/15.html">15</a> <a href="jueces/16.html">16</a> <a href="jueces/17.html">17</a> <a href="jueces/18.html">18</a> <a href="jueces/19.html">19</a> <a href="jueces/20.html">20</a> <a href="jueces/21.html">21</a>
+                </div>
+            </div>
+
+            <div class="book-item" data-title="salmos">
+                <a href="salmos" class="book-name">SALMOS</a>
+                <div class="chapters-list">
+                    <!-- Enlace resumido o completo -->
+                    <a href="salmos/1.html">1</a> <a href="salmos/2.html">2</a> <a href="salmos/23.html">Sal 23</a> <a href="salmos/51.html">Sal 51</a> <a href="salmos/91.html">Sal 91</a> <a href="salmos/150.html">150</a>
+                </div>
+            </div>
+
+            <div class="book-item" data-title="proverbios">
+                <a href="proverbios" class="book-name">PROVERBIOS</a>
+                <div class="chapters-list">
+                    <a href="proverbios/1.html">1</a> <a href="proverbios/3.html">3</a> <a href="proverbios/31.html">31</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- NUEVO TESTAMENTO -->
+        <div class="card" id="card-nt">
+            <h2 style="color: #dc2626;">✨ Nuevo Testamento</h2>
             
-        </style>        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js"></script>
-        <script>
-        $(document).ready(function(){
-        //eliminamos el scroll de la pagina
-        $("body").css({"overflow-y":"hidden"});
-        //guardamos en una variable el alto del que tiene tu browser que no es lo mismo que del DOM
-        var alto=$(window).height();
-        //agregamos en el body un div que sera que ocupe toda la pantalla y se muestra encima de todo
-        $("body").append("<div id='pre-load-web'><div id='imagen-load'><img src='JC.jpg' width='65' height='65'  /><br />Cargando...</div>");
-        //le damos el alto
-        $("#pre-load-web").css({height:alto+"px"});
-        //esta sera la capa que esta dento de la capa que muestra un gif
-        $("#imagen-load").css({"margin-top":(alto/2)-30+"px"});
-        }) 
+            <div class="book-item" data-title="mateo">
+                <a href="mateo" class="book-name">EVANGELIO SEGUN SAN MATEO</a>
+                <div class="chapters-list">
+                    <a href="mateo/1.html">1</a> <a href="mateo/2.html">2</a> <a href="mateo/3.html">3</a> <a href="mateo/4.html">4</a> <a href="mateo/5.html">5</a> <a href="mateo/6.html">6</a> <a href="mateo/7.html">7</a> <a href="mateo/8.html">8</a> <a href="mateo/9.html">9</a> <a href="mateo/10.html">10</a> <a href="mateo/11.html">11</a> <a href="mateo/12.html">12</a> <a href="mateo/13.html">13</a> <a href="mateo/14.html">14</a> <a href="mateo/15.html">15</a> <a href="mateo/16.html">16</a> <a href="mateo/17.html">17</a> <a href="mateo/18.html">18</a> <a href="mateo/19.html">19</a> <a href="mateo/20.html">20</a> <a href="mateo/21.html">21</a> <a href="mateo/22.html">22</a> <a href="mateo/23.html">23</a> <a href="mateo/24.html">24</a> <a href="mateo/25.html">25</a> <a href="mateo/26.html">26</a> <a href="mateo/27.html">27</a> <a href="mateo/28.html">28</a>
+                </div>
+            </div>
 
-        $(window).load(function(){
-           $("#pre-load-web").fadeOut(1000,function()
-           { 
-               //eliminamos la capa de precarga
-               $(this).remove();
-               //permitimos scroll
-               $("body").css({"overflow-y":"auto"}); 
+            <div class="book-item" data-title="marcos">
+                <a href="marcos" class="book-name">EVANGELIO SEGUN SAN MARCOS</a>
+                <div class="chapters-list">
+                    <a href="marcos/1.html">1</a> <a href="marcos/2.html">2</a> <a href="marcos/3.html">3</a> <a href="marcos/4.html">4</a> <a href="marcos/5.html">5</a> <a href="marcos/6.html">6</a> <a href="marcos/7.html">7</a> <a href="marcos/8.html">8</a> <a href="marcos/9.html">9</a> <a href="marcos/10.html">10</a> <a href="marcos/11.html">11</a> <a href="marcos/12.html">12</a> <a href="marcos/13.html">13</a> <a href="marcos/14.html">14</a> <a href="marcos/15.html">15</a> <a href="marcos/16.html">16</a>
+                </div>
+            </div>
 
-           });        
-        }) 
-            
-        </script>
-    <style> p, h1, h2, h3 { margin: 10px; font-family: Verdana,Geneva,sans-serif; } 
-    a:link, a:active, a:hover, a:visited { color: #F5F5DC;//#00AAE4 }</style>
-<style>
-body {
-  background-color: #00AAE4;
-}
-.container-fluid {
-  display: flex;
-  flex-flow: row;
+            <div class="book-item" data-title="lucas">
+                <a href="lucas" class="book-name">EVANGELIO SEGUN SAN LUCAS</a>
+                <div class="chapters-list">
+                    <a href="lucas/1.html">1</a> <a href="lucas/2.html">2</a> <a href="lucas/3.html">3</a> <a href="lucas/4.html">4</a> <a href="lucas/5.html">5</a> <a href="lucas/6.html">6</a> <a href="lucas/7.html">7</a> <a href="lucas/8.html">8</a> <a href="lucas/9.html">9</a> <a href="lucas/10.html">10</a> <a href="lucas/11.html">11</a> <a href="lucas/12.html">12</a> <a href="lucas/13.html">13</a> <a href="lucas/14.html">14</a> <a href="lucas/15.html">15</a> <a href="lucas/16.html">16</a> <a href="lucas/17.html">17</a> <a href="lucas/18.html">18</a> <a href="lucas/19.html">19</a> <a href="lucas/20.html">20</a> <a href="lucas/21.html">21</a> <a href="lucas/22.html">22</a> <a href="lucas/23.html">23</a> <a href="lucas/24.html">24</a>
+                </div>
+            </div>
 
-}
+            <div class="book-item" data-title="juan">
+                <a href="juan" class="book-name">EVANGELIO SEGUN SAN JUAN</a>
+                <div class="chapters-list">
+                    <a href="juan/1.html">1</a> <a href="juan/2.html">2</a> <a href="juan/3.html">3</a> <a href="juan/4.html">4</a> <a href="juan/5.html">5</a> <a href="juan/6.html">6</a> <a href="juan/7.html">7</a> <a href="juan/8.html">8</a> <a href="juan/9.html">9</a> <a href="juan/10.html">10</a> <a href="juan/11.html">11</a> <a href="juan/12.html">12</a> <a href="juan/13.html">13</a> <a href="juan/14.html">14</a> <a href="juan/15.html">15</a> <a href="juan/16.html">16</a> <a href="juan/17.html">17</a> <a href="juan/18.html">18</a> <a href="juan/19.html">19</a> <a href="juan/20.html">20</a> <a href="juan/21.html">21</a>
+                </div>
+            </div>
 
-.item {
-  flex: 1 1 auto;
-  -webkit-border-radius: 10px;
-  -moz-border-radius: 10px;
-  border-radius: 10px;
-  padding: 2px;
-    margin: 2px;
-}
+            <div class="book-item" data-title="hechos">
+                <a href="hechos" class="book-name">HECHOS DE LOS APOSTOLES</a>
+                <div class="chapters-list">
+                    <a href="hechos/1.html">1</a> <a href="hechos/2.html">2</a> <a href="hechos/28.html">28</a>
+                </div>
+            </div>
 
-@media (max-width: 750px) {
-  .container-fluid {
-    /* si es muy angosta, uno debajo del otro */
-    flex-flow: column;
-  }
-}
-.blanco {
-  background-color: ;
-  width: 20%;
-}
-.white {
-  background-color: ;
-    background-image: url("");
-  width: 40%;
-}
-@media screen and (max-width: 720px) {
-        .blanco, .white { 
-                  width: 100%; 
-                   }
-                }
-a {
-   text-decoration:none 
-}
-table {
-  border-collapse: collapse;
-  border-radius: 1em;
-  overflow: hidden;
-}
-</style>
+            <div class="book-item" data-title="romanos">
+                <a href="romanos" class="book-name">CARTA A LOS ROMANOS</a>
+                <div class="chapters-list">
+                    <a href="romanos/1.html">1</a> <a href="romanos/8.html">8</a> <a href="romanos/16.html">16</a>
+                </div>
+            </div>
 
-<!-----------------------------------MEBYA.NET-------------------------------------->
-<style>
-.btn-menu {
-  position:fixed;
-  z-index:1000;
-  top:0;
-  left:0;
-  width:100%;
-  box-shadow:0px 4px 3px rgba(0,0,0,.5);
+            <div class="book-item" data-title="apocalipsis">
+                <a href="apocalipsis" class="book-name">APOCALIPSIS</a>
+                <div class="chapters-list">
+                    <a href="apocalipsis/1.html">1</a> <a href="apocalipsis/12.html">12</a> <a href="apocalipsis/21.html">21</a> <a href="apocalipsis/22.html">22</a>
+                </div>
+            </div>
+        </div>
 
-  background-color: blue;
-  border: none;
-  color: white;
-  padding: 7px 0px 0px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 28px;
-}
-  .btn-menu:hover{
-    color: yellow;
-    background-color: blue;
-  }
-.btnPower {
-    background-color: orange;
-    color: white;
-    border: none;
-    color: black;
-    padding: 7px 28px;
-    text-align: center;
-    border-radius: 10px;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-}
-.select {
-    background-color: white;
-    border: none;
-    color: black;
-    padding: 7px 28px;
-    text-align: center;
-    border-radius: 10px;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 12px;
-}
-.jc {
-  background-color: yellow;
-  border-radius: 10px;
-}
-</style>
-<!--
-<center>
-<h2><a class="btn-menu" href="https://mebya.net/" style="text-decoration:none"><img src="../../Mebya_logo.png" width="170"></a></h2>
-</center>
-<br><br>-->
-<!-----------------------------------End MEBYA.NET-------------------------------------->
-<center><h1>BIBLIA<BR>El libro del pueblo de Dios</h1>
-<a href="https://es.wikipedia.org/wiki/Carlo_Acutis" Target="_blank">
-<p><i>En homenaje a mi amigo Carlo Acutis</i></p></a>
-<a href="ester/plus.html" style="text-decoration:none"><button title="Lectura favorita de MEBYA">⭐ MEBYA: Ester 10-16</button></a>
-<!-----------------------------------MODE: Oscuro / Claro-------------------------------------->
-<style> .oscuro{ background-color: #1f1f1f; color: #f1eded; } </style>
-<script type="text/javascript"> 
-      function cambiarModo() { 
-        var cuerpoweb = document.body; 
-        cuerpoweb.classList.toggle("oscuro");
-      } 
-    </script>
-<!--<button type="button" class="btn btn-dark" onclick="cambiarModo()"><FONT COLOR="">Oscuro / Claro</FONT></button>
-<!-----------------------------------End MODE: Oscuro / Claro-------------------------------------->
-<h3>- Índice -</h3>
-<!--<script src="random.js"></script>-->
+    </div>
+
+    <!-- Sección de Jesús Misericordioso -->
+    <div class="sidebar-card">
+        <h3 style="margin-top:0;"><a href="https://mebya.net/jc" style="text-decoration:none; color:var(--primary-color);">Jesús Misericordioso</a></h3>
+        <img src="Jesús Misericordioso.jpg" width="220" alt="Jesús Misericordioso"/><br>
+        <p><i>En Vos Confío</i></p>
+        <hr style="width:40%; margin: 15px auto; border:0; border-top:1px solid var(--border-color);" />
+        <p style="font-size: 0.9rem; font-style: italic;">
+            <b>Jeremías 17:7-8:</b> "¡Bendito el hombre que confía en el Señor y en él tiene puesta su confianza! Él es como un árbol plantado al borde de las aguas..."
+        </p>
+    </div>
+</div>
+
+<footer>
+    <p>Fuente: <a href="https://www.vatican.va/archive/ESL0506/_INDEX.HTM" target="_blank">www.vatican.va/archive/bible</a></p>
+    <p>- 2026 -</p>
+</footer>
+
+<!-- Botón Modo Oscuro / Claro -->
+<button onclick="cambiarModo()" class="btn-float">B/N</button>
+
+<!-- SCRIPT DE BÚSQUEDA Y FUNCIONALIDADES -->
 <script>
-function at() {
-const months = ["genesis/1.html", "genesis/2.html", "genesis/3.html", "genesis/4.html", "genesis/5.html", "genesis/6.html", "genesis/7.html", "genesis/8.html", "genesis/9.html", "genesis/10.html", "genesis/11.html", "genesis/12.html", "genesis/13.html", "genesis/14.html", "genesis/15.html", "genesis/16.html", "genesis/17.html", "genesis/18.html", "genesis/19.html", "genesis/20.html", "genesis/21.html", "genesis/22.html", "genesis/23.html", "genesis/24.html", "genesis/25.html", "genesis/26.html", "genesis/27.html", "genesis/28.html", "genesis/29.html", "genesis/30.html", "genesis/31.html", "genesis/32.html", "genesis/33.html", "genesis/34.html", "genesis/35.html", "genesis/36.html", "genesis/37.html", "genesis/38.html", "genesis/39.html", "genesis/40.html", "genesis/41.html", "genesis/42.html", "genesis/43.html", "genesis/44.html", "genesis/45.html", "genesis/46.html", "genesis/47.html", "genesis/48.html", "genesis/49.html", "genesis/50.html", "exodo/1.html", "exodo/2.html", "exodo/3.html", "exodo/4.html", "exodo/5.html", "exodo/6.html", "exodo/7.html", "exodo/8.html", "exodo/9.html", "exodo/10.html", "exodo/11.html", "exodo/12.html", "exodo/13.html", "exodo/14.html", "exodo/15.html", "exodo/16.html", "exodo/17.html", "exodo/18.html", "exodo/19.html", "exodo/20.html", "exodo/21.html", "exodo/22.html", "exodo/23.html", "exodo/24.html", "exodo/25.html", "exodo/26.html", "exodo/27.html", "exodo/28.html", "exodo/29.html", "exodo/30.html", "exodo/31.html", "exodo/32.html", "exodo/33.html", "exodo/34.html", "exodo/35.html", "exodo/36.html", "exodo/37.html", "exodo/38.html", "exodo/39.html", "exodo/40.html", "levitico/1.html", "levitico/2.html", "levitico/3.html", "levitico/4.html", "levitico/5.html", "levitico/6.html", "levitico/7.html", "levitico/8.html", "levitico/9.html", "levitico/10.html", "levitico/11.html", "levitico/12.html", "levitico/13.html", "levitico/14.html", "levitico/15.html", "levitico/16.html", "levitico/17.html", "levitico/18.html", "levitico/19.html", "levitico/20.html", "levitico/21.html", "levitico/22.html", "levitico/23.html", "levitico/24.html", "levitico/25.html", "levitico/26.html", "levitico/27.html", "numeros/1.html", "numeros/2.html", "numeros/3.html", "numeros/4.html", "numeros/5.html", "numeros/6.html", "numeros/7.html", "numeros/8.html", "numeros/9.html", "numeros/10.html", "numeros/11.html", "numeros/12.html", "numeros/13.html", "numeros/14.html", "numeros/15.html", "numeros/16.html", "numeros/17.html", "numeros/18.html", "numeros/19.html", "numeros/20.html", "numeros/21.html", "numeros/22.html", "numeros/23.html", "numeros/24.html", "numeros/25.html", "numeros/26.html", "numeros/27.html", "numeros/28.html", "numeros/29.html", "numeros/30.html", "numeros/31.html", "numeros/32.html", "numeros/33.html", "numeros/34.html", "numeros/35.html", "numeros/36.html", "deuteronomio/1.html", "deuteronomio/2.html", "deuteronomio/3.html", "deuteronomio/4.html", "deuteronomio/5.html", "deuteronomio/6.html", "deuteronomio/7.html", "deuteronomio/8.html", "deuteronomio/9.html", "deuteronomio/10.html", "deuteronomio/11.html", "deuteronomio/12.html", "deuteronomio/13.html", "deuteronomio/14.html", "deuteronomio/15.html", "deuteronomio/16.html", "deuteronomio/17.html", "deuteronomio/18.html", "deuteronomio/19.html", "deuteronomio/20.html", "deuteronomio/21.html", "deuteronomio/22.html", "deuteronomio/23.html", "deuteronomio/24.html", "deuteronomio/25.html", "deuteronomio/26.html", "deuteronomio/27.html", "deuteronomio/28.html", "deuteronomio/29.html", "deuteronomio/30.html", "deuteronomio/31.html", "deuteronomio/32.html", "deuteronomio/33.html", "deuteronomio/34.html", "josue/1.html", "josue/2.html", "josue/3.html", "josue/4.html", "josue/5.html", "josue/6.html", "josue/7.html", "josue/8.html", "josue/9.html", "josue/10.html", "josue/11.html", "josue/12.html", "josue/13.html", "josue/14.html", "josue/15.html", "josue/16.html", "josue/17.html", "josue/18.html", "josue/19.html", "josue/20.html", "josue/21.html", "josue/22.html", "josue/23.html", "josue/24.html", "jueces/1.html", "jueces/2.html", "jueces/3.html", "jueces/4.html", "jueces/5.html", "jueces/6.html", "jueces/7.html", "jueces/8.html", "jueces/9.html", "jueces/10.html", "jueces/11.html", "jueces/12.html", "jueces/13.html", "jueces/14.html", "jueces/15.html", "jueces/16.html", "jueces/17.html", "jueces/18.html", "jueces/19.html", "jueces/20.html", "jueces/21.html", "samuel/1.html", "samuel/2.html", "samuel/3.html", "samuel/4.html", "samuel/5.html", "samuel/6.html", "samuel/7.html", "samuel/8.html", "samuel/9.html", "samuel/10.html", "samuel/11.html", "samuel/12.html", "samuel/13.html", "samuel/14.html", "samuel/15.html", "samuel/16.html", "samuel/17.html", "samuel/18.html", "samuel/19.html", "samuel/20.html", "samuel/21.html", "samuel/22.html", "samuel/23.html", "samuel/24.html", "samuel/25.html", "samuel/26.html", "samuel/27.html", "samuel/28.html", "samuel/29.html", "samuel/30.html", "samuel/31.html", "samuel2/1.html", "samuel2/2.html", "samuel2/3.html", "samuel2/4.html", "samuel2/5.html", "samuel2/6.html", "samuel2/7.html", "samuel2/8.html", "samuel2/9.html", "samuel2/10.html", "samuel2/11.html", "samuel2/12.html", "samuel2/13.html", "samuel2/14.html", "samuel2/15.html", "samuel2/16.html", "samuel2/17.html", "samuel2/18.html", "samuel2/19.html", "samuel2/20.html", "samuel2/21.html", "samuel2/22.html", "samuel2/23.html", "samuel2/24.html", "reyes/1.html", "reyes/2.html", "reyes/3.html", "reyes/4.html", "reyes/5.html", "reyes/6.html", "reyes/7.html", "reyes/8.html", "reyes/9.html", "reyes/10.html", "reyes/11.html", "reyes/12.html", "reyes/13.html", "reyes/14.html", "reyes/15.html", "reyes/16.html", "reyes/17.html", "reyes/18.html", "reyes/19.html", "reyes/20.html", "reyes/21.html", "reyes/22.html", "reyes2/1.html", "reyes2/2.html", "reyes2/3.html", "reyes2/4.html", "reyes2/5.html", "reyes2/6.html", "reyes2/7.html", "reyes2/8.html", "reyes2/9.html", "reyes2/10.html", "reyes2/11.html", "reyes2/12.html", "reyes2/13.html", "reyes2/14.html", "reyes2/15.html", "reyes2/16.html", "reyes2/17.html", "reyes2/18.html", "reyes2/19.html", "reyes2/20.html", "reyes2/21.html", "reyes2/22.html", "reyes2/23.html", "reyes2/24.html", "reyes2/25.html", "isaias/1.html", "isaias/2.html", "isaias/3.html", "isaias/4.html", "isaias/5.html", "isaias/6.html", "isaias/7.html", "isaias/8.html", "isaias/9.html", "isaias/10.html", "isaias/11.html", "isaias/12.html", "isaias/13.html", "isaias/14.html", "isaias/15.html", "isaias/16.html", "isaias/17.html", "isaias/18.html", "isaias/19.html", "isaias/20.html", "isaias/21.html", "isaias/22.html", "isaias/23.html", "isaias/24.html", "isaias/25.html", "isaias/26.html", "isaias/27.html", "isaias/28.html", "isaias/29.html", "isaias/30.html", "isaias/31.html", "isaias/32.html", "isaias/33.html", "isaias/34.html", "isaias/35.html", "isaias/36.html", "isaias/37.html", "isaias/38.html", "isaias/39.html", "isaias/40.html", "isaias/41.html", "isaias/42.html", "isaias/43.html", "isaias/44.html", "isaias/45.html", "isaias/46.html", "isaias/47.html", "isaias/48.html", "isaias/49.html", "isaias/50.html", "isaias/51.html", "isaias/52.html", "isaias/53.html", "isaias/54.html", "isaias/55.html", "isaias/56.html", "isaias/57.html", "isaias/58.html", "isaias/59.html", "isaias/60.html", "isaias/61.html", "isaias/62.html", "isaias/63.html", "isaias/64.html", "isaias/65.html"];
+    // Función de Buscador en Tiempo Real
+    function filtrarLibros() {
+        let input = document.getElementById('searchInput').value.toLowerCase();
+        let items = document.querySelectorAll('.book-item');
 
-const random = Math.floor(Math.random() * months.length);
-console.log(random, months[random]);
-    window.location=(random, months[random]);
-
-}
-function nt() {
-const months = ["mateo/1.html", "mateo/2.html", "mateo/3.html", "mateo/4.html", "mateo/5.html", "mateo/6.html", "mateo/7.html", "mateo/8.html", "mateo/9.html", "mateo/10.html", "mateo/11.html", "mateo/12.html", "mateo/13.html", "mateo/14.html", "mateo/15.html", "mateo/16.html", "mateo/17.html", "mateo/18.html", "mateo/19.html" , "mateo/20.html", "mateo/21.html", "mateo/22.html", "mateo/23.html", "mateo/24.html", "mateo/25.html", "mateo/26.html", "mateo/27.html", "mateo/28.html", "marcos/1.html", "marcos/2.html", "marcos/3.html", "marcos/4.html", "marcos/5.html", "marcos/6.html", "marcos/7.html", "marcos/8.html", "marcos/9.html", "marcos/10.html", "marcos/11.html", "marcos/12.html", "marcos/13.html", "marcos/14.html", "marcos/15.html", "marcos/16.html", "lucas/1.html", "lucas/2.html", "lucas/3.html", "lucas/4.html", "lucas/5.html", "lucas/6.html", "lucas/7.html", "lucas/8.html", "lucas/9.html", "lucas/10.html", "lucas/11.html", "lucas/12.html", "lucas/13.html", "lucas/14.html", "lucas/15.html", "lucas/16.html", "lucas/17.html", "lucas/18.html", "lucas/19.html" , "lucas/20.html", "lucas/21.html", "lucas/22.html", "lucas/23.html", "lucas/24.html", "juan/1.html", "juan/2.html", "juan/3.html", "juan/4.html", "juan/5.html", "juan/6.html", "juan/7.html", "juan/8.html", "juan/9.html", "juan/10.html", "juan/11.html", "juan/12.html", "juan/13.html", "juan/14.html", "juan/15.html", "juan/16.html", "juan/17.html", "juan/18.html", "juan/19.html" , "juan/20.html", "juan/21.html", "hechos/1.html", "hechos/2.html", "hechos/3.html", "hechos/4.html", "hechos/5.html", "hechos/6.html", "hechos/7.html", "hechos/8.html", "hechos/9.html", "hechos/10.html", "hechos/11.html", "hechos/12.html", "hechos/13.html", "hechos/14.html", "hechos/15.html", "hechos/16.html", "hechos/17.html", "hechos/18.html", "hechos/19.html" , "hechos/20.html", "hechos/21.html", "hechos/22.html", "hechos/23.html", "hechos/24.html", "hechos/25.html", "hechos/26.html", "hechos/27.html", "hechos/28.html", "romanos/1.html", "romanos/2.html", "romanos/3.html", "romanos/4.html", "romanos/5.html", "romanos/6.html", "romanos/7.html", "romanos/8.html", "romanos/9.html", "romanos/10.html", "romanos/11.html", "romanos/12.html", "romanos/13.html", "romanos/14.html", "romanos/15.html", "romanos/16.html", "corintios/1.html", "corintios/2.html", "corintios/3.html", "corintios/4.html", "corintios/5.html", "corintios/6.html", "corintios/7.html", "corintios/8.html", "corintios/9.html", "corintios/10.html", "corintios/11.html", "corintios/12.html", "corintios/13.html", "corintios/14.html", "corintios/15.html", "corintios/16.html", "corintios2/1.html", "corintios2/2.html", "corintios2/3.html", "corintios2/4.html", "corintios2/5.html", "corintios2/6.html", "corintios2/7.html", "corintios2/8.html", "corintios2/9.html", "corintios2/10.html", "corintios2/11.html", "corintios2/12.html", "corintios2/13.html", "galatas/1.html", "galatas/2.html", "galatas/3.html", "galatas/4.html", "galatas/5.html", "galatas/6.html", "efesios/1.html", "efesios/2.html", "efesios/3.html", "efesios/4.html", "efesios/5.html", "efesios/6.html", "filipenses/1.html", "filipenses/2.html", "filipenses/3.html", "filipenses/4.html", "colosenses/1.html", "colosenses/2.html", "colosenses/3.html", "colosenses/4.html", "tesalonicenses/1.html", "tesalonicenses/2.html", "tesalonicenses/3.html", "tesalonicenses/4.html", "tesalonicenses/5.html", "tesalonicenses2/1.html", "tesalonicenses2/2.html", "tesalonicenses2/3.html", "timoteo/1.html", "timoteo/2.html", "timoteo/3.html", "timoteo/4.html", "timoteo/5.html", "timoteo/6.html", "timoteo2/1.html", "timoteo2/2.html", "timoteo2/3.html", "timoteo2/4.html", "tito/1.html", "tito/2.html", "tito/3.html", "filemon", "hebreos/1.html", "hebreos/2.html", "hebreos/3.html", "hebreos/4.html", "hebreos/5.html", "hebreos/6.html", "hebreos/7.html", "hebreos/8.html", "hebreos/9.html", "hebreos/10.html", "hebreos/11.html", "hebreos/12.html", "hebreos/13.html", "santiago/1.html", "santiago/2.html", "santiago/3.html", "santiago/4.html", "santiago/5.html", "pedro/1.html", "pedro/2.html", "pedro/3.html", "pedro/4.html", "pedro/5.html", "pedro2/1.html", "pedro2/2.html", "pedro2/3.html", "juan1/1.html", "juan1/2.html", "juan1/3.html", "juan1/4.html", "juan1/5.html", "juan2", "juan3", "judas", "apocalipsis/1.html", "apocalipsis/2.html", "apocalipsis/3.html", "apocalipsis/4.html", "apocalipsis/5.html", "apocalipsis/6.html", "apocalipsis/7.html", "apocalipsis/8.html", "apocalipsis/9.html", "apocalipsis/10.html", "apocalipsis/11.html", "apocalipsis/12.html", "apocalipsis/13.html", "apocalipsis/14.html", "apocalipsis/15.html", "apocalipsis/16.html", "apocalipsis/17.html", "apocalipsis/18.html", "apocalipsis/19.html" , "apocalipsis/20.html", "apocalipsis/21.html", "apocalipsis/22.html"];
-
-const random = Math.floor(Math.random() * months.length);
-console.log(random, months[random]);
-    window.location=(random, months[random]);
-
-}
-function todo() {
-const months = ["genesis/1.html", "genesis/2.html", "genesis/3.html", "genesis/4.html", "genesis/5.html", "genesis/6.html", "genesis/7.html", "genesis/8.html", "genesis/9.html", "genesis/10.html", "genesis/11.html", "genesis/12.html", "genesis/13.html", "genesis/14.html", "genesis/15.html", "genesis/16.html", "genesis/17.html", "genesis/18.html", "genesis/19.html", "genesis/20.html", "genesis/21.html", "genesis/22.html", "genesis/23.html", "genesis/24.html", "genesis/25.html", "genesis/26.html", "genesis/27.html", "genesis/28.html", "genesis/29.html", "genesis/30.html", "genesis/31.html", "genesis/32.html", "genesis/33.html", "genesis/34.html", "genesis/35.html", "genesis/36.html", "genesis/37.html", "genesis/38.html", "genesis/39.html", "genesis/40.html", "genesis/41.html", "genesis/42.html", "genesis/43.html", "genesis/44.html", "genesis/45.html", "genesis/46.html", "genesis/47.html", "genesis/48.html", "genesis/49.html", "genesis/50.html", "exodo/1.html", "exodo/2.html", "exodo/3.html", "exodo/4.html", "exodo/5.html", "exodo/6.html", "exodo/7.html", "exodo/8.html", "exodo/9.html", "exodo/10.html", "exodo/11.html", "exodo/12.html", "exodo/13.html", "exodo/14.html", "exodo/15.html", "exodo/16.html", "exodo/17.html", "exodo/18.html", "exodo/19.html", "exodo/20.html", "exodo/21.html", "exodo/22.html", "exodo/23.html", "exodo/24.html", "exodo/25.html", "exodo/26.html", "exodo/27.html", "exodo/28.html", "exodo/29.html", "exodo/30.html", "exodo/31.html", "exodo/32.html", "exodo/33.html", "exodo/34.html", "exodo/35.html", "exodo/36.html", "exodo/37.html", "exodo/38.html", "exodo/39.html", "exodo/40.html", "levitico/1.html", "levitico/2.html", "levitico/3.html", "levitico/4.html", "levitico/5.html", "levitico/6.html", "levitico/7.html", "levitico/8.html", "levitico/9.html", "levitico/10.html", "levitico/11.html", "levitico/12.html", "levitico/13.html", "levitico/14.html", "levitico/15.html", "levitico/16.html", "levitico/17.html", "levitico/18.html", "levitico/19.html", "levitico/20.html", "levitico/21.html", "levitico/22.html", "levitico/23.html", "levitico/24.html", "levitico/25.html", "levitico/26.html", "levitico/27.html", "numeros/1.html", "numeros/2.html", "numeros/3.html", "numeros/4.html", "numeros/5.html", "numeros/6.html", "numeros/7.html", "numeros/8.html", "numeros/9.html", "numeros/10.html", "numeros/11.html", "numeros/12.html", "numeros/13.html", "numeros/14.html", "numeros/15.html", "numeros/16.html", "numeros/17.html", "numeros/18.html", "numeros/19.html", "numeros/20.html", "numeros/21.html", "numeros/22.html", "mateo/1.html", "mateo/2.html", "mateo/3.html", "mateo/4.html", "mateo/5.html", "mateo/6.html", "mateo/7.html", "mateo/8.html", "mateo/9.html", "mateo/10.html", "mateo/11.html", "mateo/12.html", "mateo/13.html", "mateo/14.html", "mateo/15.html", "mateo/16.html", "mateo/17.html", "mateo/18.html", "mateo/19.html" , "mateo/20.html", "mateo/21.html", "mateo/22.html", "mateo/23.html", "mateo/24.html", "mateo/25.html", "mateo/26.html", "mateo/27.html", "mateo/28.html", "marcos/1.html", "marcos/2.html", "marcos/3.html", "marcos/4.html", "marcos/5.html", "marcos/6.html", "marcos/7.html", "marcos/8.html", "marcos/9.html", "marcos/10.html", "marcos/11.html", "marcos/12.html", "marcos/13.html", "marcos/14.html", "marcos/15.html", "marcos/16.html", "lucas/1.html", "lucas/2.html", "lucas/3.html", "lucas/4.html", "lucas/5.html", "lucas/6.html", "lucas/7.html", "lucas/8.html", "lucas/9.html", "lucas/10.html", "lucas/11.html", "lucas/12.html", "lucas/13.html", "lucas/14.html", "lucas/15.html", "lucas/16.html", "lucas/17.html", "lucas/18.html", "lucas/19.html" , "lucas/20.html", "lucas/21.html", "lucas/22.html", "lucas/23.html", "lucas/24.html", "juan/1.html", "juan/2.html", "juan/3.html", "juan/4.html", "juan/5.html", "juan/6.html", "juan/7.html", "juan/8.html", "juan/9.html", "juan/10.html", "juan/11.html", "juan/12.html", "juan/13.html", "juan/14.html", "juan/15.html", "juan/16.html", "juan/17.html", "juan/18.html", "juan/19.html" , "juan/20.html", "juan/21.html", "hechos/1.html", "hechos/2.html", "hechos/3.html", "hechos/4.html", "hechos/5.html", "hechos/6.html", "hechos/7.html", "hechos/8.html", "hechos/9.html", "hechos/10.html", "hechos/11.html", "hechos/12.html", "hechos/13.html", "hechos/14.html", "hechos/15.html", "hechos/16.html", "hechos/17.html", "hechos/18.html", "hechos/19.html" , "hechos/20.html", "hechos/21.html", "hechos/22.html", "hechos/23.html", "hechos/24.html", "hechos/25.html", "hechos/26.html", "hechos/27.html", "hechos/28.html", "romanos/1.html", "romanos/2.html", "romanos/3.html", "romanos/4.html", "romanos/5.html", "romanos/6.html", "romanos/7.html", "romanos/8.html", "romanos/9.html", "romanos/10.html", "romanos/11.html", "romanos/12.html", "romanos/13.html", "romanos/14.html", "romanos/15.html", "romanos/16.html", "corintios/1.html", "corintios/2.html", "corintios/3.html", "corintios/4.html", "corintios/5.html", "corintios/6.html", "corintios/7.html", "corintios/8.html", "corintios/9.html", "corintios/10.html", "corintios/11.html", "corintios/12.html", "corintios/13.html", "corintios/14.html", "corintios/15.html", "corintios/16.html", "corintios2/1.html", "corintios2/2.html", "corintios2/3.html", "corintios2/4.html", "corintios2/5.html", "corintios2/6.html", "corintios2/7.html", "corintios2/8.html", "corintios2/9.html", "corintios2/10.html", "corintios2/11.html", "corintios2/12.html", "corintios2/13.html", "galatas/1.html", "galatas/2.html", "galatas/3.html", "galatas/4.html", "galatas/5.html", "galatas/6.html", "efesios/1.html", "efesios/2.html", "efesios/3.html", "efesios/4.html", "efesios/5.html", "efesios/6.html", "filipenses/1.html", "filipenses/2.html", "filipenses/3.html", "filipenses/4.html", "colosenses/1.html", "colosenses/2.html", "colosenses/3.html", "colosenses/4.html", "tesalonicenses/1.html", "tesalonicenses/2.html", "tesalonicenses/3.html", "tesalonicenses/4.html", "tesalonicenses/5.html", "tesalonicenses2/1.html", "tesalonicenses2/2.html", "tesalonicenses2/3.html", "timoteo/1.html", "timoteo/2.html", "timoteo/3.html", "timoteo/4.html", "timoteo/5.html", "timoteo/6.html", "timoteo2/1.html", "timoteo2/2.html", "timoteo2/3.html", "timoteo2/4.html", "tito/1.html", "tito/2.html", "tito/3.html", "filemon", "hebreos/1.html", "hebreos/2.html", "hebreos/3.html", "hebreos/4.html", "hebreos/5.html", "hebreos/6.html", "hebreos/7.html", "hebreos/8.html", "hebreos/9.html", "hebreos/10.html", "hebreos/11.html", "hebreos/12.html", "hebreos/13.html", "santiago/1.html", "santiago/2.html", "santiago/3.html", "santiago/4.html", "santiago/5.html", "pedro/1.html", "pedro/2.html", "pedro/3.html", "pedro/4.html", "pedro/5.html", "pedro2/1.html", "pedro2/2.html", "pedro2/3.html", "juan1/1.html", "juan1/2.html", "juan1/3.html", "juan1/4.html", "juan1/5.html", "juan2", "juan3", "judas", "apocalipsis/1.html", "apocalipsis/2.html", "apocalipsis/3.html", "apocalipsis/4.html", "apocalipsis/5.html", "apocalipsis/6.html", "apocalipsis/7.html", "apocalipsis/8.html", "apocalipsis/9.html", "apocalipsis/10.html", "apocalipsis/11.html", "apocalipsis/12.html", "apocalipsis/13.html", "apocalipsis/14.html", "apocalipsis/15.html", "apocalipsis/16.html", "apocalipsis/17.html", "apocalipsis/18.html", "apocalipsis/19.html" , "apocalipsis/20.html", "apocalipsis/21.html", "apocalipsis/22.html"];
-
-const random = Math.floor(Math.random() * months.length);
-console.log(random, months[random]);
-    window.location=(random, months[random]);
-
-}
-</script>
-    <script>
-        function mialerta() {  
-            Swal.fire('Antes del click en el botón es menester confiar en nuestro SEÑOR Jesucristo, diciendo con el ❤ :<br><br>¡JESÚS, EN VOS CONFÍO!')
-        } 
-    </script>
-<table><tr><td bgcolor="yellow" style="color: blue; padding: 10px;">
-Lectura <input class="jc" type="button" onclick="mialerta();" value="ℹ"/>:
-<button onclick="at()">Antiguo</button>
-<button onclick="nt()">Nuevo</button>
-<button onclick="todo()">Todo</button>
-</td></tr></table>
-</center>
-<div class="container-fluid">
-    <div class="item white">
-<center>
-    <br>
-<form>
-<select class="select" name="select" style="width:90%;" onchange="location = this.value;">
-  <option value="">EL ANTIGUO TESTAMENTO</option>
-  <option value="genesis">GENESIS</a></option>
-  <option value="exodo">EXODO</option>
-  <option value="levitico">LEVITICO</option>
-  <option value="numeros">NUMEROS</option>
-  <option value="deuteronomio">DEUTERONOMIO</option>
-  <option value="josue">JOSUE</option>
-  <option value="jueces">JUECES</option>
-  <option value="samuel">PRIMER LIBRO DE SAMUEL</option>
-  <option value="samuel2">SEGUNDO LIBRO DE SAMUEL</option>
-  <option value="reyes">PRIMER LIBRO DE LOS REYES</option>
-  <option value="reyes2">SEGUNDO LIBRO DE LOS REYES</option>
-  <option value="isaias">ISAIAS</option>
-  <option value="jeremias">JEREMIAS</option>
-  <option value="ezequiel">EZEQUIEL</option>
-  <option value="oseas">OSEAS</option>
-  <option value="joel">JOEL</option>
-  <option value="amos">AMOS</option>
-  <option value="abdias">ABDIAS</option>
-  <option value="jonas">JONAS</option>
-  <option value="miqueas">MIQUEAS</option>
-  <option value="nahum">NAHUM</option>
-  <option value="habacuc">HABACUC</option>
-  <option value="sofonias">SOFONIAS</option>
-  <option value="ageo">AGEO</option>
-  <option value="zacarias">ZACARIAS</option>
-  <option value="malaquias">MALAQUIAS</option>
-  <option value="salmos">SALMOS</option>
-  <option value="job">JOB</option>
-  <option value="proverbios">PROVERBIOS</option>
-  <option value="rut">RUT</option>
-  <option value="cantar">CANTAR DE LOS CANTARES</option>
-  <option value="eclesiastes">ECLESIASTES</option>
-  <option value="lamentaciones">LAMENTACIONES</option>
-  <option value="ester">ESTER</option>
-  <option value="daniel">DANIEL</option>
-  <option value="cronicas">PRIMER LIBRO DE LAS CRONICAS</option>
-  <option value="cronicas2">SEGUNDO LIBRO DE LAS CRONICAS</option>
-  <option value="esdras">ESDRAS</option>
-  <option value="nehemias">NEHEMIAS</option>
-  <option value="ester2">ESTER SUPLEMENTOS GRIEGOS</option>
-  <option value="judit">JUDIT</option>
-  <option value="tobias">TOBIAS</option>
-  <option value="macabeos">PRIMER LIBRO DE LOS MACABEOS</option>
-  <option value="macabeos2">SEGUNDO LIBRO DE LOS MACABEOS</option>
-  <option value="sabiduria">SABIDURIA</option>
-  <option value="eclesiastico">ECLESIASTICO</option>
-  <option value="baruc">BARUC</option>
-  <option value="jeremias2">CARTA DE JEREMIAS</option>
-  <option value="daniel2">DANIEL SUPLEMENTOS GRIEGOS</option>
-</select>
-</form>
-</center>
-</div>
-    <div class="item white">
-<center>
-    <br>
-<form>
-<select class="select" name="select2" style="width:90%;" onchange="location = this.value;">
-  <option value="">EL NUEVO TESTAMENTO</option>
-  <option value="mateo">EVANGELIO SEGUN SAN MATEO</option>
-  <option value="marcos">EVANGELIO SEGUN SAN MARCOS</option>
-  <option value="lucas">EVANGELIO SEGUN SAN LUCAS</option>
-  <option value="juan">EVANGELIO SEGUN SAN JUAN</option>
-  <option value="hechos">HECHOS DE LOS APOSTOLES</option>
-  <option value="romanos">CARTA A LOS ROMANOS</option>
-  <option value="corintios">PRIMERA CARTA A LOS CORINTIOS</option>
-  <option value="corintios2">SEGUNDA CARTA A LOS CORINTIOS</option>
-  <option value="galatas">CARTA A LOS GALATAS</option>
-  <option value="efesios">CARTA A LOS EFESIOS</option>
-  <option value="filipenses">CARTA A LOS FILIPENSES</option>
-  <option value="colosenses">CARTA A LOS COLOSENSES</option>
-  <option value="tesalonicenses">PRIMERA CARTA A LOS TESALONICENSES</option>
-  <option value="tesalonicenses2">SEGUNDA CARTA A LOS TESALONICENSES</option>
-  <option value="timoteo">PRIMERA CARTA A TIMOTEO</option>
-  <option value="timoteo2">SEGUNDA CARTA A TIMOTEO</option>
-  <option value="tito">CARTA A TITO</option>
-  <option value="filemon">CARTA A FILEMON</option>
-  <option value="hebreos">CARTA A LOS HEBREOS</option>
-  <option value="santiago">CARTA DE SANTIAGO</option>
-  <option value="pedro">PRIMERA CARTA DE SAN PEDRO</option>
-  <option value="pedro2">SEGUNDA CARTA DE SAN PEDRO</option>
-  <option value="juan1">PRIMERA CARTA DE SAN JUAN</option>
-  <option value="juan2">SEGUNDA CARTA DE SAN JUAN</option>
-  <option value="juan3">TERCERA CARTA DE SAN JUAN</option>
-  <option value="judas">CARTA DE SAN JUDAS</option>
-  <option value="apocalipsis">APOCALIPSIS</option>
-</select>
-</form>
-</center>
-</div>
-<div class="item blanco">
-<center>
-    <br>
-<button class="btnPower"><a href="donar.html" style="text-decoration:none">BONAR</a></button>    
-<!--<H2><mark><FONT COLOR="yellow"><a href="https://mebya.net/jc/biblia/donar.html" style="text-decoration:none">&nbsp&nbspDonar&nbsp&nbsp</FONT></a></mark></H2>-->
-</center>
-</div>
-</div>
-
-<div class="container-fluid">
-
-    <div class="item white">
-<center><h2>
-<FONT COLOR="orange">El Antiguo Testamento</FONT>
-</h2></center>
-<p>
-<a href="genesis">GENESIS</a><br>
- <a href="genesis/1.html">1</a>. <a href="genesis/2.html">2</a>. <a href="genesis/3.html">3</a>. <a href="genesis/4.html">4</a>. <a href="genesis/5.html">5</a>. <a href="genesis/6.html">6</a>. <a href="genesis/7.html">7</a>. <a href="genesis/8.html">8</a>. <a href="genesis/9.html">9</a>. <a href="genesis/10.html">10</a>. <a href="genesis/11.html">11</a>. <a href="genesis/12.html">12</a>. <a href="genesis/13.html">13</a>. <a href="genesis/14.html">14</a>. <a href="genesis/15.html">15</a>. <a href="genesis/16.html">16</a>. <a href="genesis/17.html">17</a>. <a href="genesis/18.html">18</a>. <a href="genesis/19.html">19</a>. <a href="genesis/20.html">20</a>. <a href="genesis/21.html">21</a>. <a href="genesis/22.html">22</a>. <a href="genesis/23.html">23</a>. <a href="genesis/24.html">24</a>. <a href="genesis/25.html">25</a>. <a href="genesis/26.html">26</a>. <a href="genesis/27.html">27</a>. <a href="genesis/28.html">28</a>. <a href="genesis/29.html">29</a>. <a href="genesis/30.html">30</a>. <a href="genesis/31.html">31</a>. <a href="genesis/32.html">32</a>. <a href="genesis/33.html">33</a>. <a href="genesis/34.html">34</a>. <a href="genesis/35.html">35</a>. <a href="genesis/36.html">36</a>. <a href="genesis/37.html">37</a>. <a href="genesis/38.html">38</a>. <a href="genesis/39.html">39</a>. <a href="genesis/40.html">40</a>. <a href="genesis/41.html">41</a>. <a href="genesis/42.html">42</a>. <a href="genesis/43.html">43</a>. <a href="genesis/44.html">44</a>. <a href="genesis/45.html">45</a>. <a href="genesis/46.html">46</a>. <a href="genesis/47.html">47</a>. <a href="genesis/48.html">48</a>. <a href="genesis/49.html">49</a>. <a href="genesis/50.html">50</a>.
-</p><p>
-<a href="exodo">EXODO</a><br>
-<a href="exodo/1.html">1</a>. <a href="exodo/2.html">2</a>. <a href="exodo/3.html">3</a>. <a href="exodo/4.html">4</a>. <a href="exodo/5.html">5</a>. <a href="exodo/6.html">6</a>. <a href="exodo/7.html">7</a>. <a href="exodo/8.html">8</a>. <a href="exodo/9.html">9</a>. <a href="exodo/10.html">10</a>. <a href="exodo/11.html">11</a>. <a href="exodo/12.html">12</a>. <a href="exodo/13.html">13</a>. <a href="exodo/14.html">14</a>. <a href="exodo/15.html">15</a>. <a href="exodo/16.html">16</a>. <a href="exodo/17.html">17</a>. <a href="exodo/18.html">18</a>. <a href="exodo/19.html">19</a>. <a href="exodo/20.html">20</a>. <a href="exodo/21.html">21</a>. <a href="exodo/22.html">22</a>. <a href="exodo/23.html">23</a>. <a href="exodo/24.html">24</a>. <a href="exodo/25.html">25</a>. <a href="exodo/26.html">26</a>. <a href="exodo/27.html">27</a>. <a href="exodo/28.html">28</a>. <a href="exodo/29.html">29</a>. <a href="exodo/30.html">30</a>. <a href="exodo/31.html">31</a>. <a href="exodo/32.html">32</a>. <a href="exodo/33.html">33</a>. <a href="exodo/34.html">34</a>. <a href="exodo/35.html">35</a>. <a href="exodo/36.html">36</a>. <a href="exodo/37.html">37</a>. <a href="exodo/38.html">38</a>. <a href="exodo/39.html">39</a>. <a href="exodo/40.html">40</a>.
-</p><p>
-<a href="levitico">LEVITICO</a><br>
-<a href="levitico/1.html">1</a>. <a href="levitico/2.html">2</a>. <a href="levitico/3.html">3</a>. <a href="levitico/4.html">4</a>. <a href="levitico/5.html">5</a>. <a href="levitico/6.html">6</a>. <a href="levitico/7.html">7</a>. <a href="levitico/8.html">8</a>. <a href="levitico/9.html">9</a>. <a href="levitico/10.html">10</a>. <a href="levitico/11.html">11</a>. <a href="levitico/12.html">12</a>. <a href="levitico/13.html">13</a>. <a href="levitico/14.html">14</a>. <a href="levitico/15.html">15</a>. <a href="levitico/16.html">16</a>. <a href="levitico/17.html">17</a>. <a href="levitico/18.html">18</a>. <a href="levitico/19.html">19</a>. <a href="levitico/20.html">20</a>. <a href="levitico/21.html">21</a>. <a href="levitico/22.html">22</a>. <a href="levitico/23.html">23</a>. <a href="levitico/24.html">24</a>. <a href="levitico/25.html">25</a>. <a href="levitico/26.html">26</a>. <a href="levitico/27.html">27</a>.
-</p><p>
-<a href="numeros">NUMEROS</a><br>
-<a href="numeros/1.html">1</a>. <a href="numeros/2.html">2</a>. <a href="numeros/3.html">3</a>. <a href="numeros/4.html">4</a>. <a href="numeros/5.html">5</a>. <a href="numeros/6.html">6</a>. <a href="numeros/7.html">7</a>. <a href="numeros/8.html">8</a>. <a href="numeros/9.html">9</a>. <a href="numeros/10.html">10</a>. <a href="numeros/11.html">11</a>. <a href="numeros/12.html">12</a>. <a href="numeros/13.html">13</a>. <a href="numeros/14.html">14</a>. <a href="numeros/15.html">15</a>. <a href="numeros/16.html">16</a>. <a href="numeros/17.html">17</a>. <a href="numeros/18.html">18</a>. <a href="numeros/19.html">19</a>. <a href="numeros/20.html">20</a>. <a href="numeros/21.html">21</a>. <a href="numeros/22.html">22</a>. <a href="numeros/23.html">23</a>. <a href="numeros/24.html">24</a>. <a href="numeros/25.html">25</a>. <a href="numeros/26.html">26</a>. <a href="numeros/27.html">27</a>. <a href="numeros/28.html">28</a>. <a href="numeros/29.html">29</a>. <a href="numeros/30.html">30</a>. <a href="numeros/31.html">31</a>. <a href="numeros/32.html">32</a>. <a href="numeros/33.html">33</a>. <a href="numeros/34.html">34</a>. <a href="numeros/35.html">35</a>. <a href="numeros/36.html">36</a>.
-</p><p>
-<a href="deuteronomio">DEUTERONOMIO</a><br>
-<a href="deuteronomio/1.html">1</a>. <a href="deuteronomio/2.html">2</a>. <a href="deuteronomio/3.html">3</a>. <a href="deuteronomio/4.html">4</a>. <a href="deuteronomio/5.html">5</a>. <a href="deuteronomio/6.html">6</a>. <a href="deuteronomio/7.html">7</a>. <a href="deuteronomio/8.html">8</a>. <a href="deuteronomio/9.html">9</a>. <a href="deuteronomio/10.html">10</a>. <a href="deuteronomio/11.html">11</a>. <a href="deuteronomio/12.html">12</a>. <a href="deuteronomio/13.html">13</a>. <a href="deuteronomio/14.html">14</a>. <a href="deuteronomio/15.html">15</a>. <a href="deuteronomio/16.html">16</a>. <a href="deuteronomio/17.html">17</a>. <a href="deuteronomio/18.html">18</a>. <a href="deuteronomio/19.html">19</a>. <a href="deuteronomio/20.html">20</a>. <a href="deuteronomio/21.html">21</a>. <a href="deuteronomio/22.html">22</a>. <a href="deuteronomio/23.html">23</a>. <a href="deuteronomio/24.html">24</a>. <a href="deuteronomio/25.html">25</a>. <a href="deuteronomio/26.html">26</a>. <a href="deuteronomio/27.html">27</a>. <a href="deuteronomio/28.html">28</a>. <a href="deuteronomio/29.html">29</a>. <a href="deuteronomio/30.html">30</a>. <a href="deuteronomio/31.html">31</a>. <a href="deuteronomio/32.html">32</a>. <a href="deuteronomio/33.html">33</a>. <a href="deuteronomio/34.html">34</a>.
-</p><p>
-<a href="josue">JOSUE</a><br>
-<a href="josue/1.html">1</a>. <a href="josue/2.html">2</a>. <a href="josue/3.html">3</a>. <a href="josue/4.html">4</a>. <a href="josue/5.html">5</a>. <a href="josue/6.html">6</a>. <a href="josue/7.html">7</a>. <a href="josue/8.html">8</a>. <a href="josue/9.html">9</a>. <a href="josue/10.html">10</a>. <a href="josue/11.html">11</a>. <a href="josue/12.html">12</a>. <a href="josue/13.html">13</a>. <a href="josue/14.html">14</a>. <a href="josue/15.html">15</a>. <a href="josue/16.html">16</a>. <a href="josue/17.html">17</a>. <a href="josue/18.html">18</a>. <a href="josue/19.html">19</a>. <a href="josue/20.html">20</a>. <a href="josue/21.html">21</a>. <a href="josue/22.html">22</a>. <a href="josue/23.html">23</a>. <a href="josue/24.html">24</a>.
-</p><p>
-<a href="jueces">JUECES</a><br>
-<a href="jueces/1.html">1</a>. <a href="jueces/2.html">2</a>. <a href="jueces/3.html">3</a>. <a href="jueces/4.html">4</a>. <a href="jueces/5.html">5</a>. <a href="jueces/6.html">6</a>. <a href="jueces/7.html">7</a>. <a href="jueces/8.html">8</a>. <a href="jueces/9.html">9</a>. <a href="jueces/10.html">10</a>. <a href="jueces/11.html">11</a>. <a href="jueces/12.html">12</a>. <a href="jueces/13.html">13</a>. <a href="jueces/14.html">14</a>. <a href="jueces/15.html">15</a>. <a href="jueces/16.html">16</a>. <a href="jueces/17.html">17</a>. <a href="jueces/18.html">18</a>. <a href="jueces/19.html">19</a>. <a href="jueces/20.html">20</a>. <a href="jueces/21.html">21</a>.
-</p><p>
-<a href="samuel">PRIMER LIBRO DE SAMUEL</a><br>
-<a href="samuel/1.html">1</a>. <a href="samuel/2.html">2</a>. <a href="samuel/3.html">3</a>. <a href="samuel/4.html">4</a>. <a href="samuel/5.html">5</a>. <a href="samuel/6.html">6</a>. <a href="samuel/7.html">7</a>. <a href="samuel/8.html">8</a>. <a href="samuel/9.html">9</a>. <a href="samuel/10.html">10</a>. <a href="samuel/11.html">11</a>. <a href="samuel/12.html">12</a>. <a href="samuel/13.html">13</a>. <a href="samuel/14.html">14</a>. <a href="samuel/15.html">15</a>. <a href="samuel/16.html">16</a>. <a href="samuel/17.html">17</a>. <a href="samuel/18.html">18</a>. <a href="samuel/19.html">19</a>. <a href="samuel/20.html">20</a>. <a href="samuel/21.html">21</a>. <a href="samuel/22.html">22</a>. <a href="samuel/23.html">23</a>. <a href="samuel/24.html">24</a>. <a href="samuel/25.html">25</a>. <a href="samuel/26.html">26</a>. <a href="samuel/27.html">27</a>. <a href="samuel/28.html">28</a>. <a href="samuel/29.html">29</a>. <a href="samuel/30.html">30</a>. <a href="samuel/31.html">31</a>.
-</p><p>
-<a href="samuel2">SEGUNDO LIBRO DE SAMUEL</a><br>
-<a href="samuel2/1.html">1</a>. <a href="samuel2/2.html">2</a>. <a href="samuel2/3.html">3</a>. <a href="samuel2/4.html">4</a>. <a href="samuel2/5.html">5</a>. <a href="samuel2/6.html">6</a>. <a href="samuel2/7.html">7</a>. <a href="samuel2/8.html">8</a>. <a href="samuel2/9.html">9</a>. <a href="samuel2/10.html">10</a>. <a href="samuel2/11.html">11</a>. <a href="samuel2/12.html">12</a>. <a href="samuel2/13.html">13</a>. <a href="samuel2/14.html">14</a>. <a href="samuel2/15.html">15</a>. <a href="samuel2/16.html">16</a>. <a href="samuel2/17.html">17</a>. <a href="samuel2/18.html">18</a>. <a href="samuel2/19.html">19</a>. <a href="samuel2/20.html">20</a>. <a href="samuel2/21.html">21</a>. <a href="samuel2/22.html">22</a>. <a href="samuel2/23.html">23</a>. <a href="samuel2/24.html">24</a>.
-</p><p>
-<a href="reyes">PRIMER LIBRO DE LOS REYES</a><br>
-<a href="reyes/1.html">1</a>. <a href="reyes/2.html">2</a>. <a href="reyes/3.html">3</a>. <a href="reyes/4.html">4</a>. <a href="reyes/5.html">5</a>. <a href="reyes/6.html">6</a>. <a href="reyes/7.html">7</a>. <a href="reyes/8.html">8</a>. <a href="reyes/9.html">9</a>. <a href="reyes/10.html">10</a>. <a href="reyes/11.html">11</a>. <a href="reyes/12.html">12</a>. <a href="reyes/13.html">13</a>. <a href="reyes/14.html">14</a>. <a href="reyes/15.html">15</a>. <a href="reyes/16.html">16</a>. <a href="reyes/17.html">17</a>. <a href="reyes/18.html">18</a>. <a href="reyes/19.html">19</a>. <a href="reyes/20.html">20</a>. <a href="reyes/21.html">21</a>. <a href="reyes/22.html">22</a>.
-</p><p>
-<a href="reyes2">SEGUNDO LIBRO DE LOS REYES</a><br>
-<a href="reyes2/1.html">1</a>. <a href="reyes2/2.html">2</a>. <a href="reyes2/3.html">3</a>. <a href="reyes2/4.html">4</a>. <a href="reyes2/5.html">5</a>. <a href="reyes2/6.html">6</a>. <a href="reyes2/7.html">7</a>. <a href="reyes2/8.html">8</a>. <a href="reyes2/9.html">9</a>. <a href="reyes2/10.html">10</a>. <a href="reyes2/11.html">11</a>. <a href="reyes2/12.html">12</a>. <a href="reyes2/13.html">13</a>. <a href="reyes2/14.html">14</a>. <a href="reyes2/15.html">15</a>. <a href="reyes2/16.html">16</a>. <a href="reyes2/17.html">17</a>. <a href="reyes2/18.html">18</a>. <a href="reyes2/19.html">19</a>. <a href="reyes2/20.html">20</a>. <a href="reyes2/21.html">21</a>. <a href="reyes2/22.html">22</a>. <a href="reyes2/23.html">23</a>. <a href="reyes2/24.html">24</a>. <a href="reyes2/25.html">25</a>.
-</p><p>
-<a href="isaias">ISAIAS</a><br>
-<a href="isaias/1.html">1</a. <a href="isaias/2.html">2</a>. <a href="isaias/3.html">3</a>. <a href="isaias/4.html">4</a>. <a href="isaias/5.html">5</a>. <a href="isaias/6.html">6</a>. <a href="isaias/7.html">7</a>. <a href="isaias/8.html">8</a>. <a href="isaias/9.html">9</a>. <a href="isaias/10.html">10</a>. <a href="isaias/11.html">11</a>. <a href="isaias/12.html">12</a>. <a href="isaias/13.html">13</a>. <a href="isaias/14.html">14</a>. <a href="isaias/15.html">15</a>. <a href="isaias/16.html">16</a>. <a href="isaias/17.html">17</a>. <a href="isaias/18.html">18</a>. <a href="isaias/19.html">19</a>. <a href="isaias/20.html">20</a>. <a href="isaias/21.html">21</a>. <a href="isaias/22.html">22</a>. <a href="isaias/23.html">23</a>. <a href="isaias/24.html">24</a>. <a href="isaias/25.html">25</a>. <a href="isaias/26.html">26</a>. <a href="isaias/27.html">27</a>. <a href="isaias/28.html">28</a>. <a href="isaias/29.html">29</a>. <a href="isaias/30.html">30</a>. <a href="isaias/31.html">31</a>. <a href="isaias/32.html">32</a>. <a href="isaias/33.html">33</a>. <a href="isaias/34.html">34</a>. <a href="isaias/35.html">35</a>. <a href="isaias/36.html">36</a>. <a href="isaias/37.html">37</a>. <a href="isaias/38.html">38</a>. <a href="isaias/39.html">39</a>. <a href="isaias/40.html">40</a>. <a href="isaias/41.html">41</a>. <a href="isaias/42.html">42</a>. <a href="isaias/43.html">43</a>. <a href="isaias/44.html">44</a>. <a href="isaias/45.html">45</a>. <a href="isaias/46.html">46</a>. <a href="isaias/47.html">47</a>. <a href="isaias/48.html">48</a>. <a href="isaias/49.html">49</a>. <a href="isaias/50.html">50</a>. <a href="isaias/51.html">51</a>. <a href="isaias/52.html">52</a>. <a href="isaias/53.html">53</a>. <a href="isaias/54.html">54</a>. <a href="isaias/55.html">55</a>. <a href="isaias/56.html">56</a>. <a href="isaias/57.html">57</a>. <a href="isaias/58.html">58</a>. <a href="isaias/59.html">59</a>. <a href="isaias/60.html">60</a>. <a href="isaias/61.html">61</a>. <a href="isaias/62.html">62</a>. <a href="isaias/63.html">63</a>. <a href="isaias/64.html">64</a>. <a href="isaias/65.html">65</a>. <a href="isaias/66.html">66</a>.
-</p><p>
-<a href="jeremias">JEREMIAS</a><br>
-<a href="jeremias/1.html">1</a>. <a href="jeremias/2.html">2</a>. <a href="jeremias/3.html">3</a>. <a href="jeremias/4.html">4</a>. <a href="jeremias/5.html">5</a>. <a href="jeremias/6.html">6</a>. <a href="jeremias/7.html">7</a>. <a href="jeremias/8.html">8</a>. <a href="jeremias/9.html">9</a>. <a href="jeremias/10.html">10</a>. <a href="jeremias/11.html">11</a>. <a href="jeremias/12.html">12</a>. <a href="jeremias/13.html">13</a>. <a href="jeremias/14.html">14</a>. <a href="jeremias/15.html">15</a>. <a href="jeremias/16.html">16</a>. <a href="jeremias/17.html">17</a>. <a href="jeremias/18.html">18</a>. <a href="jeremias/19.html">19</a>. <a href="jeremias/20.html">20</a>. <a href="jeremias/21.html">21</a>. <a href="jeremias/22.html">22</a>. <a href="jeremias/23.html">23</a>. <a href="jeremias/24.html">24</a>. <a href="jeremias/25.html">25</a>. <a href="jeremias/26.html">26</a>. <a href="jeremias/27.html">27</a>. <a href="jeremias/28.html">28</a>. <a href="jeremias/29.html">29</a>. <a href="jeremias/30.html">30</a>. <a href="jeremias/31.html">31</a>. <a href="jeremias/32.html">32</a>. <a href="jeremias/33.html">33</a>. <a href="jeremias/34.html">34</a>. <a href="jeremias/35.html">35</a>. <a href="jeremias/36.html">36</a>. <a href="jeremias/37.html">37</a>. <a href="jeremias/38.html">38</a>. <a href="jeremias/39.html">39</a>. <a href="jeremias/40.html">40</a>. <a href="jeremias/41.html">41</a>. <a href="jeremias/42.html">42</a>. <a href="jeremias/43.html">43</a>. <a href="jeremias/44.html">44</a>. <a href="jeremias/45.html">45</a>. <a href="jeremias/46.html">46</a>. <a href="jeremias/47.html">47</a>. <a href="jeremias/48.html">48</a>. <a href="jeremias/49.html">49</a>. <a href="jeremias/50.html">50</a>. <a href="jeremias/51.html">51</a>. <a href="jeremias/52.html">52</a>.
-</p><p>
-<a href="ezequiel">EZEQUIEL</a><br>
-<a href="ezequiel/1.html">1</a>. <a href="ezequiel/2.html">2</a>. <a href="ezequiel/3.html">3</a>. <a href="ezequiel/4.html">4</a>. <a href="ezequiel/5.html">5</a>. <a href="ezequiel/6.html">6</a>. <a href="ezequiel/7.html">7</a>. <a href="ezequiel/8.html">8</a>. <a href="ezequiel/9.html">9</a>. <a href="ezequiel/10.html">10</a>. <a href="ezequiel/11.html">11</a>. <a href="ezequiel/12.html">12</a>. <a href="ezequiel/13.html">13</a>. <a href="ezequiel/14.html">14</a>. <a href="ezequiel/15.html">15</a>. <a href="ezequiel/16.html">16</a>. <a href="ezequiel/17.html">17</a>. <a href="ezequiel/18.html">18</a>. <a href="ezequiel/19.html">19</a>. <a href="ezequiel/20.html">20</a>. <a href="ezequiel/21.html">21</a>. <a href="ezequiel/22.html">22</a>. <a href="ezequiel/23.html">23</a>. <a href="ezequiel/24.html">24</a>. <a href="ezequiel/25.html">25</a>. <a href="ezequiel/26.html">26</a>. <a href="ezequiel/27.html">27</a>. <a href="ezequiel/28.html">28</a>. <a href="ezequiel/29.html">29</a>. <a href="ezequiel/30.html">30</a>. <a href="ezequiel/31.html">31</a>. <a href="ezequiel/32.html">32</a>. <a href="ezequiel/33.html">33</a>. <a href="ezequiel/34.html">34</a>. <a href="ezequiel/35.html">35</a>. <a href="ezequiel/36.html">36</a>. <a href="ezequiel/37.html">37</a>. <a href="ezequiel/38.html">38</a>. <a href="ezequiel/39.html">39</a>. <a href="ezequiel/40.html">40</a>. <a href="ezequiel/41.html">41</a>. <a href="ezequiel/42.html">42</a>. <a href="ezequiel/43.html">43</a>. <a href="ezequiel/44.html">44</a>. <a href="ezequiel/45.html">45</a>. <a href="ezequiel/46.html">46</a>. <a href="ezequiel/47.html">47</a>. <a href="ezequiel/48.html">48</a>.
-</p><p>
-<a href="oseas">OSEAS</a><br>
-<a href="oseas/1.html">1</a>. <a href="oseas/2.html">2</a>. <a href="oseas/3.html">3</a>. <a href="oseas/4.html">4</a>. <a href="oseas/5.html">5</a>. <a href="oseas/6.html">6</a>. <a href="oseas/7.html">7</a>. <a href="oseas/8.html">8</a>. <a href="oseas/9.html">9</a>. <a href="oseas/10.html">10</a>. <a href="oseas/11.html">11</a>. <a href="oseas/12.html">12</a>. <a href="oseas/13.html">13</a>. <a href="oseas/14.html">14</a>.
-</p><p>
-<a href="joel">JOEL</a><br>
-<a href="joel/1.html">1</a>. <a href="joel/2.html">2</a>. <a href="joel/3.html">3</a>. <a href="joel/4.html">4</a>.
-</p><p>
-<a href="amos">AMOS</a><br>
-<a href="amos/1.html">1</a>. <a href="amos/2.html">2</a>. <a href="amos/3.html">3</a>. <a href="amos/4.html">4</a>. <a href="amos/5.html">5</a>. <a href="amos/6.html">6</a>. <a href="amos/7.html">7</a>. <a href="amos/8.html">8</a>. <a href="amos/9.html">9</a>.
-</p><p>
-<a href="abdias">ABDIAS</a><br>
-</p><p>
-<a href="jonas">JONAS</a><br>
-<a href="jonas/1.html">1</a>. <a href="jonas/2.html">2</a>. <a href="jonas/3.html">3</a>. <a href="jonas/4.html">4</a>.
-</p><p>
-<a href="miqueas">MIQUEAS</a><br>
-<a href="miqueas/1.html">1</a>. <a href="miqueas/2.html">2</a>. <a href="miqueas/3.html">3</a>. <a href="miqueas/4.html">4</a>. <a href="miqueas/5.html">5</a>. <a href="miqueas/6.html">6</a>. <a href="miqueas/7.html">7</a>.
-</p><p>
-<a href="nahum">NAHUM</a><br>
-<a href="nahum/1.html">1</a>. <a href="nahum/2.html">2</a>. <a href="nahum/3.html">3</a>.
-</p><p>
-<a href="habacuc">HABACUC</a><br>
-<a href="habacuc/1.html">1</a>. <a href="habacuc/2.html">2</a>. <a href="habacuc/3.html">3</a>.
-</p><p>
-<a href="sofonias">SOFONIAS</a><br>
-<a href="sofonias/1.html">1</a>. <a href="sofonias/2.html">2</a>. <a href="sofonias/3.html">3</a>.
-</p><p>
-<a href="ageo">AGEO</a><br>
-<a href="ageo/1.html">1</a>. <a href="ageo/2.html">2</a>.
-</p><p>
-<a href="zacarias">ZACARIAS</a><br>
-<a href="zacarias/1.html">1</a>. <a href="zacarias/2.html">2</a>. <a href="zacarias/3.html">3</a>. <a href="zacarias/4.html">4</a>. <a href="zacarias/5.html">5</a>. <a href="zacarias/6.html">6</a>. <a href="zacarias/7.html">7</a>. <a href="zacarias/8.html">8</a>. <a href="zacarias/9.html">9</a>. <a href="zacarias/10.html">10</a>. <a href="zacarias/11.html">11</a>. <a href="zacarias/12.html">12</a>. <a href="zacarias/13.html">13</a>. <a href="zacarias/14.html">14</a>.
-</p><p>
-<a href="malaquias">MALAQUIAS</a><br>
-<a href="malaquias/1.html">1</a>. <a href="malaquias/2.html">2</a>. <a href="malaquias/3.html">3</a>.
-</p><p>
-<a href="salmos">SALMOS</a><br>
-<a href="salmos/1.html">1</a>. <a href="salmos/2.html">2</a>. <a href="salmos/3.html">3</a>. <a href="salmos/4.html">4</a>. <a href="salmos/5.html">5</a>. <a href="salmos/6.html">6</a>. <a href="salmos/7.html">7</a>. <a href="salmos/8.html">8</a>. <a href="salmos/9.html">9</a>. <a href="salmos/10.html">10</a>. <a href="salmos/11.html">11</a>. <a href="salmos/12.html">12</a>. <a href="salmos/13.html">13</a>. <a href="salmos/14.html">14</a>. <a href="salmos/15.html">15</a>. <a href="salmos/16.html">16</a>. <a href="salmos/17.html">17</a>. <a href="salmos/18.html">18</a>. <a href="salmos/19.html">19</a>. <a href="salmos/20.html">20</a>. <a href="salmos/21.html">21</a>. <a href="salmos/22.html">22</a>. <a href="salmos/23.html">23</a>. <a href="salmos/24.html">24</a>. <a href="salmos/25.html">25</a>. <a href="salmos/26.html">26</a>. <a href="salmos/27.html">27</a>. <a href="salmos/28.html">28</a>. <a href="salmos/29.html">29</a>. <a href="salmos/30.html">30</a>. <a href="salmos/31.html">31</a>. <a href="salmos/32.html">32</a>. <a href="salmos/33.html">33</a>. <a href="salmos/34.html">34</a>. <a href="salmos/35.html">35</a>. <a href="salmos/36.html">36</a>. <a href="salmos/37.html">37</a>. <a href="salmos/38.html">38</a>. <a href="salmos/39.html">39</a>. <a href="salmos/40.html">40</a>. <a href="salmos/41.html">41</a>. <a href="salmos/42.html">42</a>. <a href="salmos/43.html">43</a>. <a href="salmos/44.html">44</a>. <a href="salmos/45.html">45</a>. <a href="salmos/46.html">46</a>. <a href="salmos/47.html">47</a>. <a href="salmos/48.html">48</a>. <a href="salmos/49.html">49</a>. <a href="salmos/50.html">50</a>. <a href="salmos/51.html">51</a>. <a href="salmos/52.html">52</a>. <a href="salmos/53.html">53</a>. <a href="salmos/54.html">54</a>. <a href="salmos/55.html">55</a>. <a href="salmos/56.html">56</a>. <a href="salmos/57.html">57</a>. <a href="salmos/58.html">58</a>. <a href="salmos/59.html">59</a>. <a href="salmos/60.html">60</a>. <a href="salmos/61.html">61</a>. <a href="salmos/62.html">62</a>. <a href="salmos/63.html">63</a>. <a href="salmos/64.html">64</a>. <a href="salmos/65.html">65</a>. <a href="salmos/66.html">66</a>. <a href="salmos/67.html">67</a>. <a href="salmos/68.html">68</a>. <a href="salmos/69.html">69</a>. <a href="salmos/70.html">70</a>. <a href="salmos/71.html">71</a>. <a href="salmos/72.html">72</a>. <a href="salmos/73.html">73</a>. <a href="salmos/74.html">74</a>. <a href="salmos/75.html">75</a>. <a href="salmos/76.html">76</a>. <a href="salmos/77.html">77</a>. <a href="salmos/78.html">78</a>. <a href="salmos/79.html">79</a>. <a href="salmos/80.html">80</a>. <a href="salmos/81.html">81</a>. <a href="salmos/82.html">82</a>. <a href="salmos/83.html">83</a>. <a href="salmos/84.html">84</a>. <a href="salmos/85.html">85</a>. <a href="salmos/86.html">86</a>. <a href="salmos/87.html">87</a>. <a href="salmos/88.html">88</a>. <a href="salmos/89.html">89</a>. <a href="salmos/90.html">90</a>. <a href="salmos/91.html">91</a>. <a href="salmos/92.html">92</a>. <a href="salmos/93.html">93</a>. <a href="salmos/94.html">94</a>. <a href="salmos/95.html">95</a>. <a href="salmos/96.html">96</a>. <a href="salmos/97.html">97</a>. <a href="salmos/98.html">98</a>. <a href="salmos/99.html">99</a>. <a href="salmos/100.html">100</a>.<a href="salmos/101.html">101</a>. <a href="salmos/102.html">102</a>. <a href="salmos/103.html">103</a>. <a href="salmos/104.html">104</a>. <a href="salmos/105.html">105</a>. <a href="salmos/106.html">106</a>. <a href="salmos/107.html">107</a>. <a href="salmos/108.html">108</a>. <a href="salmos/109.html">109</a>. <a href="salmos/110.html">110</a>.<a href="salmos/111.html">111</a>. <a href="salmos/112.html">112</a>. <a href="salmos/113.html">113</a>. <a href="salmos/114.html">114</a>. <a href="salmos/115.html">115</a>. <a href="salmos/116.html">116</a>. <a href="salmos/117.html">117</a>. <a href="salmos/118.html">118</a>. <a href="salmos/119.html">119</a>. <a href="salmos/120.html">120</a>. <a href="salmos/121.html">121</a>. <a href="salmos/122.html">122</a>. <a href="salmos/123.html">123</a>. <a href="salmos/124.html">124</a>. <a href="salmos/125.html">125</a>. <a href="salmos/126.html">126</a>. <a href="salmos/127.html">127</a>. <a href="salmos/128.html">128</a>. <a href="salmos/129.html">129</a>. <a href="salmos/130.html">130</a>. <a href="salmos/131.html">131</a>. <a href="salmos/132.html">132</a>. <a href="salmos/133.html">133</a>. <a href="salmos/134.html">134</a>. <a href="salmos/135.html">135</a>. <a href="salmos/136.html">136</a>. <a href="salmos/137.html">137</a>. <a href="salmos/138.html">138</a>. <a href="salmos/139.html">139</a>. <a href="salmos/140.html">140</a>. <a href="salmos/141.html">141</a>. <a href="salmos/142.html">142</a>. <a href="salmos/143.html">143</a>. <a href="salmos/144.html">144</a>. <a href="salmos/145.html">145</a>. <a href="salmos/146.html">146</a>. <a href="salmos/147.html">147</a>. <a href="salmos/148.html">148</a>. <a href="salmos/149.html">149</a>. <a href="salmos/150.html">150</a>.
-</p><p>
-<a href="job">JOB</a><br>
-<a href="job/1.html">1</a>. <a href="job/2.html">2</a>. <a href="job/3.html">3</a>. <a href="job/4.html">4</a>. <a href="job/5.html">5</a>. <a href="job/6.html">6</a>. <a href="job/7.html">7</a>. <a href="job/8.html">8</a>. <a href="job/9.html">9</a>. <a href="job/10.html">10</a>. <a href="job/11.html">11</a>. <a href="job/12.html">12</a>. <a href="job/13.html">13</a>. <a href="job/14.html">14</a>. <a href="job/15.html">15</a>. <a href="job/16.html">16</a>. <a href="job/17.html">17</a>. <a href="job/18.html">18</a>. <a href="job/19.html">19</a>. <a href="job/20.html">20</a>. <a href="job/21.html">21</a>. <a href="job/22.html">22</a>. <a href="job/23.html">23</a>. <a href="job/24.html">24</a>. <a href="job/25.html">25</a>. <a href="job/26.html">26</a>. <a href="job/27.html">27</a>. <a href="job/28.html">28</a>. <a href="job/29.html">29</a>. <a href="job/30.html">30</a>. <a href="job/31.html">31</a>. <a href="job/32.html">32</a>. <a href="job/33.html">33</a>. <a href="job/34.html">34</a>. <a href="job/35.html">35</a>. <a href="job/36.html">36</a>. <a href="job/37.html">37</a>. <a href="job/38.html">38</a>. <a href="job/39.html">39</a>. <a href="job/40.html">40</a>. <a href="job/41.html">41</a>. <a href="job/42.html">42</a>.
-</p><p>
-<a href="proverbios">PROVERBIOS</a><br>
-<a href="proverbios/1.html">1</a>. <a href="proverbios/2.html">2</a>. <a href="proverbios/3.html">3</a>. <a href="proverbios/4.html">4</a>. <a href="proverbios/5.html">5</a>. <a href="proverbios/6.html">6</a>. <a href="proverbios/7.html">7</a>. <a href="proverbios/8.html">8</a>. <a href="proverbios/9.html">9</a>. <a href="proverbios/10.html">10</a>. <a href="proverbios/11.html">11</a>. <a href="proverbios/12.html">12</a>. <a href="proverbios/13.html">13</a>. <a href="proverbios/14.html">14</a>. <a href="proverbios/15.html">15</a>. <a href="proverbios/16.html">16</a>. <a href="proverbios/17.html">17</a>. <a href="proverbios/18.html">18</a>. <a href="proverbios/19.html">19</a>. <a href="proverbios/20.html">20</a>. <a href="proverbios/21.html">21</a>. <a href="proverbios/22.html">22</a>. <a href="proverbios/23.html">23</a>. <a href="proverbios/24.html">24</a>. <a href="proverbios/25.html">25</a>. <a href="proverbios/26.html">26</a>. <a href="proverbios/27.html">27</a>. <a href="proverbios/28.html">28</a>. <a href="proverbios/29.html">29</a>. <a href="proverbios/30.html">30</a>. <a href="proverbios/31.html">31</a>.
-</p><p>
-<a href="rut">RUT</a><br>
-<a href="rut/1.html">1</a>. <a href="rut/2.html">2</a>. <a href="rut/3.html">3</a>. <a href="rut/4.html">4</a>.
-</p><p>
-<a href="cantar">CANTAR DE LOS CANTARES</a><br>
-<a href="cantar/1.html">1</a>. <a href="cantar/2.html">2</a>. <a href="cantar/3.html">3</a>. <a href="cantar/4.html">4</a>. <a href="cantar/5.html">5</a>. <a href="cantar/6.html">6</a>. <a href="cantar/7.html">7</a>. <a href="cantar/8.html">8</a>.
-</p><p>
-<a href="eclesiastes">ECLESIASTES</a><br>
-<a href="eclesiastes/1.html">1</a>. <a href="eclesiastes/2.html">2</a>. <a href="eclesiastes/3.html">3</a>. <a href="eclesiastes/4.html">4</a>. <a href="eclesiastes/5.html">5</a>. <a href="eclesiastes/6.html">6</a>. <a href="eclesiastes/7.html">7</a>. <a href="eclesiastes/8.html">8</a>. <a href="eclesiastes/9.html">9</a>. <a href="eclesiastes/10.html">10</a>. <a href="eclesiastes/11.html">11</a>. <a href="eclesiastes/12.html">12</a>.
-</p><p>
-<a href="lamentaciones">LAMENTACIONES</a><br>
-<a href="lamentaciones/1.html">1</a>. <a href="lamentaciones/2.html">2</a>. <a href="lamentaciones/3.html">3</a>. <a href="lamentaciones/4.html">4</a>. <a href="lamentaciones/5.html">5</a>.
-</p><p>
-<a href="ester">ESTER</a><br>
-<a href="ester/1.html">1</a>. <a href="ester/2.html">2</a>. <a href="ester/3.html">3</a>. <a href="ester/4.html">4</a>. <a href="ester/5.html">5</a>. <a href="ester/6.html">6</a>. <a href="ester/7.html">7</a>. <a href="ester/8.html">8</a>. <a href="ester/9.html">9</a>. <a href="ester/10.html">10</a>. <a href="ester/plus.html">10-16</a>.
-</p><p>
-<a href="daniel">DANIEL</a><br>
-<a href="daniel/1.html">1</a>. <a href="daniel/2.html">2</a>. <a href="daniel/3.html">3</a>. <a href="daniel/4.html">4</a>. <a href="daniel/5.html">5</a>. <a href="daniel/6.html">6</a>. <a href="daniel/7.html">7</a>. <a href="daniel/8.html">8</a>. <a href="daniel/9.html">9</a>. <a href="daniel/10.html">10</a>. <a href="daniel/11.html">11</a>. <a href="daniel/12.html">12</a>.
-</p><p>
-<a href="cronicas">PRIMER LIBRO DE LAS CRONICAS</a><br>
-<a href="cronicas/1.html">1</a>. <a href="cronicas/2.html">2</a>. <a href="cronicas/3.html">3</a>. <a href="cronicas/4.html">4</a>. <a href="cronicas/5.html">5</a>. <a href="cronicas/6.html">6</a>. <a href="cronicas/7.html">7</a>. <a href="cronicas/8.html">8</a>. <a href="cronicas/9.html">9</a>. <a href="cronicas/10.html">10</a>. <a href="cronicas/11.html">11</a>. <a href="cronicas/12.html">12</a>. <a href="cronicas/13.html">13</a>. <a href="cronicas/14.html">14</a>. <a href="cronicas/15.html">15</a>. <a href="cronicas/16.html">16</a>. <a href="cronicas/17.html">17</a>. <a href="cronicas/18.html">18</a>. <a href="cronicas/19.html">19</a>. <a href="cronicas/20.html">20</a>. <a href="cronicas/21.html">21</a>. <a href="cronicas/22.html">22</a>. <a href="cronicas/23.html">23</a>. <a href="cronicas/24.html">24</a>. <a href="cronicas/25.html">25</a>. <a href="cronicas/26.html">26</a>. <a href="cronicas/27.html">27</a>. <a href="cronicas/28.html">28</a>. <a href="cronicas/29.html">29</a>.
-</p><p>
-<a href="cronicas2">SEGUNDO LIBRO DE LAS CRONICAS</a><br>
-<a href="cronicas2/1.html">1</a>. <a href="cronicas2/2.html">2</a>. <a href="cronicas2/3.html">3</a>. <a href="cronicas2/4.html">4</a>. <a href="cronicas2/5.html">5</a>. <a href="cronicas2/6.html">6</a>. <a href="cronicas2/7.html">7</a>. <a href="cronicas2/8.html">8</a>. <a href="cronicas2/9.html">9</a>. <a href="cronicas2/10.html">10</a>. <a href="cronicas2/11.html">11</a>. <a href="cronicas2/12.html">12</a>. <a href="cronicas2/13.html">13</a>. <a href="cronicas2/14.html">14</a>. <a href="cronicas2/15.html">15</a>. <a href="cronicas2/16.html">16</a>. <a href="cronicas2/17.html">17</a>. <a href="cronicas2/18.html">18</a>. <a href="cronicas2/19.html">19</a>. <a href="cronicas2/20.html">20</a>. <a href="cronicas2/21.html">21</a>. <a href="cronicas2/22.html">22</a>. <a href="cronicas2/23.html">23</a>. <a href="cronicas2/24.html">24</a>. <a href="cronicas2/25.html">25</a>. <a href="cronicas2/26.html">26</a>. <a href="cronicas2/27.html">27</a>. <a href="cronicas2/28.html">28</a>. <a href="cronicas2/29.html">29</a>. <a href="cronicas2/30.html">30</a>. <a href="cronicas2/31.html">31</a>. <a href="cronicas2/32.html">32</a>. <a href="cronicas2/33.html">33</a>. <a href="cronicas2/34.html">34</a>. <a href="cronicas2/35.html">35</a>. <a href="cronicas2/36.html">36</a>.
-</p><p>
-<a href="esdras">ESDRAS</a><br>
-<a href="esdras/1.html">1</a>. <a href="esdras/2.html">2</a>. <a href="esdras/3.html">3</a>. <a href="esdras/4.html">4</a>. <a href="esdras/5.html">5</a>. <a href="esdras/6.html">6</a>. <a href="esdras/7.html">7</a>. <a href="esdras/8.html">8</a>. <a href="esdras/9.html">9</a>. <a href="esdras/10.html">10</a>.
-</p><p>
-<a href="nehemias">NEHEMIAS</a><br>
-<a href="nehemias/1.html">1</a>. <a href="nehemias/2.html">2</a>. <a href="nehemias/3.html">3</a>. <a href="nehemias/4.html">4</a>. <a href="nehemias/5.html">5</a>. <a href="nehemias/6.html">6</a>. <a href="nehemias/7.html">7</a>. <a href="nehemias/8.html">8</a>. <a href="nehemias/9.html">9</a>. <a href="nehemias/10.html">10</a>. <a href="nehemias/11.html">11</a>. <a href="nehemias/12.html">12</a>. <a href="nehemias/13.html">13</a>.
-</p><p>
-<a href="ester2/">ESTER SUPLEMENTOS GRIEGOS</a><br>
-<a href="ester2/1.html">1</a>. <a href="ester2/3.html">3</a>. <a href="ester2/4.html">4</a>. <a href="ester2/5.html">5</a>. <a href="ester2/8.html">8</a>. <a href="ester2/10.html">10</a>.
-</p><p>
-<a href="judit">JUDIT</a><br>
-<a href="judit/1.html">1</a>. <a href="judit/2.html">2</a>. <a href="judit/3.html">3</a>. <a href="judit/4.html">4</a>. <a href="judit/5.html">5</a>. <a href="judit/6.html">6</a>. <a href="judit/7.html">7</a>. <a href="judit/8.html">8</a>. <a href="judit/9.html">9</a>. <a href="judit/10.html">10</a>. <a href="judit/11.html">11</a>. <a href="judit/12.html">12</a>. <a href="judit/13.html">13</a>. <a href="judit/14.html">14</a>. <a href="judit/15.html">15</a>. <a href="judit/16.html">16</a>.
-</p><p>
-<a href="tobias">TOBIAS</a><br>
-<a href="tobias/1.html">1</a>. <a href="tobias/2.html">2</a>. <a href="tobias/3.html">3</a>. <a href="tobias/4.html">4</a>. <a href="tobias/5.html">5</a>. <a href="tobias/6.html">6</a>. <a href="tobias/7.html">7</a>. <a href="tobias/8.html">8</a>. <a href="tobias/9.html">9</a>. <a href="tobias/10.html">10</a>. <a href="tobias/11.html">11</a>. <a href="tobias/12.html">12</a>. <a href="tobias/13.html">13</a>. <a href="tobias/14.html">14</a>.
-</p><p>
-<a href="macabeos">PRIMER LIBRO DE LOS MACABEOS</a><br>
-<a href="macabeos/1.html">1</a>. <a href="macabeos/2.html">2</a>. <a href="macabeos/3.html">3</a>. <a href="macabeos/4.html">4</a>. <a href="macabeos/5.html">5</a>. <a href="macabeos/6.html">6</a>. <a href="macabeos/7.html">7</a>. <a href="macabeos/8.html">8</a>. <a href="macabeos/9.html">9</a>. <a href="macabeos/10.html">10</a>. <a href="macabeos/11.html">11</a>. <a href="macabeos/12.html">12</a>. <a href="macabeos/13.html">13</a>. <a href="macabeos/14.html">14</a>. <a href="macabeos/15.html">15</a>. <a href="macabeos/16.html">16</a>.
-</p><p>
-<a href="macabeos2">SEGUNDO LIBRO DE LOS MACABEOS</a><br>
-<a href="macabeos2/1.html">1</a>. <a href="macabeos2/2.html">2</a>. <a href="macabeos2/3.html">3</a>. <a href="macabeos2/4.html">4</a>. <a href="macabeos2/5.html">5</a>. <a href="macabeos2/6.html">6</a>. <a href="macabeos2/7.html">7</a>. <a href="macabeos2/8.html">8</a>. <a href="macabeos2/9.html">9</a>. <a href="macabeos2/10.html">10</a>. <a href="macabeos2/11.html">11</a>. <a href="macabeos2/12.html">12</a>. <a href="macabeos2/13.html">13</a>. <a href="macabeos2/14.html">14</a>. <a href="macabeos2/15.html">15</a>.
-</p><p>
-<a href="sabiduria">SABIDURIA</a><br>
-<a href="sabiduria/1.html">1</a>. <a href="sabiduria/2.html">2</a>. <a href="sabiduria/3.html">3</a>. <a href="sabiduria/4.html">4</a>. <a href="sabiduria/5.html">5</a>. <a href="sabiduria/6.html">6</a>. <a href="sabiduria/7.html">7</a>. <a href="sabiduria/8.html">8</a>. <a href="sabiduria/9.html">9</a>. <a href="sabiduria/10.html">10</a>. <a href="sabiduria/11.html">11</a>. <a href="sabiduria/12.html">12</a>. <a href="sabiduria/13.html">13</a>. <a href="sabiduria/14.html">14</a>. <a href="sabiduria/15.html">15</a>. <a href="sabiduria/16.html">16</a>. <a href="sabiduria/17.html">17</a>. <a href="sabiduria/18.html">18</a>. <a href="sabiduria/19.html">19</a>.
-</p><p>
-<a href="eclesiastico">ECLESIASTICO</a><br>
-<a href="eclesiastico/1.html">1</a>. <a href="eclesiastico/2.html">2</a>. <a href="eclesiastico/3.html">3</a>. <a href="eclesiastico/4.html">4</a>. <a href="eclesiastico/5.html">5</a>. <a href="eclesiastico/6.html">6</a>. <a href="eclesiastico/7.html">7</a>. <a href="eclesiastico/8.html">8</a>. <a href="eclesiastico/9.html">9</a>. <a href="eclesiastico/10.html">10</a>. <a href="eclesiastico/11.html">11</a>. <a href="eclesiastico/12.html">12</a>. <a href="eclesiastico/13.html">13</a>. <a href="eclesiastico/14.html">14</a>. <a href="eclesiastico/15.html">15</a>. <a href="eclesiastico/16.html">16</a>. <a href="eclesiastico/17.html">17</a>. <a href="eclesiastico/18.html">18</a>. <a href="eclesiastico/19.html">19</a>. <a href="eclesiastico/20.html">20</a>. <a href="eclesiastico/21.html">21</a>. <a href="eclesiastico/22.html">22</a>. <a href="eclesiastico/23.html">23</a>. <a href="eclesiastico/24.html">24</a>. <a href="eclesiastico/25.html">25</a>. <a href="eclesiastico/26.html">26</a>. <a href="eclesiastico/27.html">27</a>. <a href="eclesiastico/28.html">28</a>. <a href="eclesiastico/29.html">29</a>. <a href="eclesiastico/30.html">30</a>. <a href="eclesiastico/31.html">31</a>. <a href="eclesiastico/32.html">32</a>. <a href="eclesiastico/33.html">33</a>. <a href="eclesiastico/34.html">34</a>. <a href="eclesiastico/35.html">35</a>. <a href="eclesiastico/36.html">36</a>. <a href="eclesiastico/37.html">37</a>. <a href="eclesiastico/38.html">38</a>. <a href="eclesiastico/39.html">39</a>. <a href="eclesiastico/40.html">40</a>. <a href="eclesiastico/41.html">41</a>. <a href="eclesiastico/42.html">42</a>. <a href="eclesiastico/43.html">43</a>. <a href="eclesiastico/44.html">44</a>. <a href="eclesiastico/45.html">45</a>. <a href="eclesiastico/46.html">46</a>. <a href="eclesiastico/47.html">47</a>. <a href="eclesiastico/48.html">48</a>. <a href="eclesiastico/49.html">49</a>. <a href="eclesiastico/50.html">50</a>. <a href="eclesiastico/51.html">51</a>.
-</p><p>
-<a href="baruc">BARUC</a><br>
-<a href="baruc/1.html">1</a>. <a href="baruc/2.html">2</a>. <a href="baruc/3.html">3</a>. <a href="baruc/4.html">4</a>. <a href="baruc/5.html">5</a>.
-</p><p>
-<a href="jeremias2">CARTA DE JEREMIAS</a>
-</p><p>
-<a href="daniel2">DANIEL SUPLEMENTOS GRIEGOS</a><br>
-<a href="daniel2/3.html">3</a>. <a href="daniel2/13.html">13</a>. <a href="daniel2/14.html">14</a>.
-</p>
-</div>
-    <div class="item white">
-<center><h2>
-<FONT COLOR="red">El Nuevo Testamento</FONT>
-</h2></center>
-<p>
-<a href="mateo/">EVANGELIO SEGUN SAN MATEO</a><br>
-<a href="mateo/1.html">1</a>. <a href="mateo/2.html">2</a>. <a href="mateo/3.html">3</a>. <a href="mateo/4.html">4</a>. <a href="mateo/5.html">5</a>. <a href="mateo/6.html">6</a>. <a href="mateo/7.html">7</a>. <a href="mateo/8.html">8</a>. <a href="mateo/9.html">9</a>. <a href="mateo/10.html">10</a>. <a href="mateo/11.html">11</a>. <a href="mateo/12.html">12</a>. <a href="mateo/13.html">13</a>. <a href="mateo/14.html">14</a>. <a href="mateo/15.html">15</a>. <a href="mateo/16.html">16</a>. <a href="mateo/17.html">17</a>. <a href="mateo/18.html">18</a>. <a href="mateo/19.html">19</a>. <a href="mateo/20.html">20</a>. <a href="mateo/21.html">21</a>. <a href="mateo/22.html">22</a>. <a href="mateo/23.html">23</a>. <a href="mateo/24.html">24</a>. <a href="mateo/25.html">25</a>. <a href="mateo/26.html">26</a>. <a href="mateo/27.html">27</a>. <a href="mateo/28.html">28</a>.
-</p><p>
-<a href="marcos">EVANGELIO SEGUN SAN MARCOS</a><br>
-<a href="marcos/1.html">1</a>. <a href="marcos/2.html">2</a>. <a href="marcos/3.html">3</a>. <a href="marcos/4.html">4</a>. <a href="marcos/5.html">5</a>. <a href="marcos/6.html">6</a>. <a href="marcos/7.html">7</a>. <a href="marcos/8.html">8</a>. <a href="marcos/9.html">9</a>. <a href="marcos/10.html">10</a>. <a href="marcos/11.html">11</a>. <a href="marcos/12.html">12</a>. <a href="marcos/13.html">13</a>. <a href="marcos/14.html">14</a>. <a href="marcos/15.html">15</a>. <a href="marcos/16.html">16</a>.
-</p><p>
-<a href="lucas">EVANGELIO SEGUN SAN LUCAS</a><br>
-<a href="lucas/1.html">1</a>. <a href="lucas/2.html">2</a>. <a href="lucas/3.html">3</a>. <a href="lucas/4.html">4</a>. <a href="lucas/5.html">5</a>. <a href="lucas/6.html">6</a>. <a href="lucas/7.html">7</a>. <a href="lucas/8.html">8</a>. <a href="lucas/9.html">9</a>. <a href="lucas/10.html">10</a>. <a href="lucas/11.html">11</a>. <a href="lucas/12.html">12</a>. <a href="lucas/13.html">13</a>. <a href="lucas/14.html">14</a>. <a href="lucas/15.html">15</a>. <a href="lucas/16.html">16</a>. <a href="lucas/17.html">17</a>. <a href="lucas/18.html">18</a>. <a href="lucas/19.html">19</a>. <a href="lucas/20.html">20</a>. <a href="lucas/21.html">21</a>. <a href="lucas/22.html">22</a>. <a href="lucas/23.html">23</a>. <a href="lucas/24.html">24</a>.
-</p><p>
-<a href="juan">EVANGELIO SEGUN SAN JUAN</a><br>
-<a href="juan/1.html">1</a>. <a href="juan/2.html">2</a>. <a href="juan/3.html">3</a>. <a href="juan/4.html">4</a>. <a href="juan/5.html">5</a>. <a href="juan/6.html">6</a>. <a href="juan/7.html">7</a>. <a href="juan/8.html">8</a>. <a href="juan/9.html">9</a>. <a href="juan/10.html">10</a>. <a href="juan/11.html">11</a>. <a href="juan/12.html">12</a>. <a href="juan/13.html">13</a>. <a href="juan/14.html">14</a>. <a href="juan/15.html">15</a>. <a href="juan/16.html">16</a>. <a href="juan/17.html">17</a>. <a href="juan/18.html">18</a>. <a href="juan/19.html">19</a>. <a href="juan/20.html">20</a>. <a href="juan/21.html">21</a>.
-</p><p>
-<a href="hechos">HECHOS DE LOS APOSTOLES</a><br>
-<a href="hechos/1.html">1</a>. <a href="hechos/2.html">2</a>. <a href="hechos/3.html">3</a>. <a href="hechos/4.html">4</a>. <a href="hechos/5.html">5</a>. <a href="hechos/6.html">6</a>. <a href="hechos/7.html">7</a>. <a href="hechos/8.html">8</a>. <a href="hechos/9.html">9</a>. <a href="hechos/10.html">10</a>. <a href="hechos/11.html">11</a>. <a href="hechos/12.html">12</a>. <a href="hechos/13.html">13</a>. <a href="hechos/14.html">14</a>. <a href="hechos/15.html">15</a>. <a href="hechos/16.html">16</a>. <a href="hechos/17.html">17</a>. <a href="hechos/18.html">18</a>. <a href="hechos/19.html">19</a>. <a href="hechos/20.html">20</a>. <a href="hechos/21.html">21</a>. <a href="hechos/22.html">22</a>. <a href="hechos/23.html">23</a>. <a href="hechos/24.html">24</a>. <a href="hechos/25.html">25</a>. <a href="hechos/26.html">26</a>. <a href="hechos/27.html">27</a>. <a href="hechos/28.html">28</a>.
-</p><p>
-<a href="romanos">CARTA A LOS ROMANOS</a><br>
-<a href="romanos/1.html">1</a>. <a href="romanos/2.html">2</a>. <a href="romanos/3.html">3</a>. <a href="romanos/4.html">4</a>. <a href="romanos/5.html">5</a>. <a href="romanos/6.html">6</a>. <a href="romanos/7.html">7</a>. <a href="romanos/8.html">8</a>. <a href="romanos/9.html">9</a>. <a href="romanos/10.html">10</a>. <a href="romanos/11.html">11</a>. <a href="romanos/12.html">12</a>. <a href="romanos/13.html">13</a>. <a href="romanos/14.html">14</a>. <a href="romanos/15.html">15</a>. <a href="romanos/16.html">16</a>.
-</p><p>
-<a href="corintios">PRIMERA CARTA A LOS CORINTIOS</a><br>
-<a href="corintios/1.html">1</a>. <a href="corintios/2.html">2</a>. <a href="corintios/3.html">3</a>. <a href="corintios/4.html">4</a>. <a href="corintios/5.html">5</a>. <a href="corintios/6.html">6</a>. <a href="corintios/7.html">7</a>. <a href="corintios/8.html">8</a>. <a href="corintios/9.html">9</a>. <a href="corintios/10.html">10</a>. <a href="corintios/11.html">11</a>. <a href="corintios/12.html">12</a>. <a href="corintios/13.html">13</a>. <a href="corintios/14.html">14</a>. <a href="corintios/15.html">15</a>. <a href="corintios/16.html">16</a>.
-</p><p>
-<a href="corintios2">SEGUNDA CARTA A LOS CORINTIOS<br>
-<a href="corintios2/1.html">1</a>. <a href="corintios2/2.html">2</a>. <a href="corintios2/3.html">3</a>. <a href="corintios2/4.html">4</a>. <a href="corintios2/5.html">5</a>. <a href="corintios2/6.html">6</a>. <a href="corintios2/7.html">7</a>. <a href="corintios2/8.html">8</a>. <a href="corintios2/9.html">9</a>. <a href="corintios2/10.html">10</a>. <a href="corintios2/11.html">11</a>. <a href="corintios2/12.html">12</a>. <a href="corintios2/13.html">13</a>.
-</p><p>
-<a href="galatas">CARTA A LOS GALATAS</a><br>
-<a href="galatas/1.html">1</a>. <a href="galatas/2.html">2</a>. <a href="galatas/3.html">3</a>. <a href="galatas/4.html">4</a>. <a href="galatas/5.html">5</a>. <a href="galatas/6.html">6</a>.
-</p><p>
-<a href="efesios">CARTA A LOS EFESIOS</a><br>
-<a href="efesios/1.html">1</a>. <a href="efesios/2.html">2</a>. <a href="efesios/3.html">3</a>. <a href="efesios/4.html">4</a>. <a href="efesios/5.html">5</a>. <a href="efesios/6.html">6</a>.
-</p><p>
-<a href="filipenses">CARTA A LOS FILIPENSES</a><br>
-<a href="filipenses/1.html">1</a>. <a href="filipenses/2.html">2</a>. <a href="filipenses/3.html">3</a>. <a href="filipenses/4.html">4</a>.
-</p><p>
-<a href="colosenses">CARTA A LOS COLOSENSES</a><br>
-<a href="colosenses/1.html">1</a>. <a href="colosenses/2.html">2</a>. <a href="colosenses/3.html">3</a>. <a href="colosenses/4.html">4</a>.
-</p><p>
-<a href="tesalonicenses">PRIMERA CARTA A LOS TESALONICENSES</a><br>
-<a href="tesalonicenses/1.html">1</a>. <a href="tesalonicenses/2.html">2</a>. <a href="tesalonicenses/3.html">3</a>. <a href="tesalonicenses/4.html">4</a>. <a href="tesalonicenses/5.html">5</a>.
-</p><p>
-<a href="tesalonicenses2">SEGUNDA CARTA A LOS TESALONICENSES</a><br>
-<a href="tesalonicenses2/1.html">1</a>. <a href="tesalonicenses2/2.html">2</a>. <a href="tesalonicenses2/3.html">3</a>.
-</p><p>
-<a href="timoteo">PRIMERA CARTA A TIMOTEO</a><br>
-<a href="timoteo/1.html">1</a>. <a href="timoteo/2.html">2</a>. <a href="timoteo/3.html">3</a>. <a href="timoteo/4.html">4</a>. <a href="timoteo/5.html">5</a>. <a href="timoteo/6.html">6</a>.
-</p><p>
-<a href="timoteo2">SEGUNDA CARTA A TIMOTEO</a><br>
-<a href="timoteo2/1.html">1</a>. <a href="timoteo2/2.html">2</a>. <a href="timoteo2/3.html">3</a>. <a href="timoteo2/4.html">4</a>.
-</p><p>
-<a href="tito">CARTA A TITO<br>
-<a href="tito/1.html">1</a>. <a href="tito/2.html">2</a>. <a href="tito/3.html">3</a>.
-</p><p>
-<a href="filemon">CARTA A FILEMON</a>
-</p><p>
-<a href="hebreos">CARTA A LOS HEBREOS</a><br>
-<a href="hebreos/1.html">1</a>. <a href="hebreos/2.html">2</a>. <a href="hebreos/3.html">3</a>. <a href="hebreos/4.html">4</a>. <a href="hebreos/5.html">5</a>. <a href="hebreos/6.html">6</a>. <a href="hebreos/7.html">7</a>. <a href="hebreos/8.html">8</a>. <a href="hebreos/9.html">9</a>. <a href="hebreos/10.html">10</a>. <a href="hebreos/11.html">11</a>. <a href="hebreos/12.html">12</a>. <a href="hebreos/13.html">13</a>.
-</p><p>
-<a href="santiago">CARTA DE SANTIAGO</a><br>
-<a href="santiago/1.html">1</a>. <a href="santiago/2.html">2</a>. <a href="santiago/3.html">3</a>. <a href="santiago/4.html">4</a>. <a href="santiago/5.html">5</a>.
-</p><p>
-<a href="pedro">PRIMERA CARTA DE SAN PEDRO</a><br>
-<a href="pedro/1.html">1</a>. <a href="pedro/2.html">2</a>. <a href="pedro/3.html">3</a>. <a href="pedro/4.html">4</a>. <a href="pedro/5.html">5</a>.
-</p><p>
-<a href="pedro2">SEGUNDA CARTA DE SAN PEDRO</a><br>
-<a href="pedro2/1.html">1</a>. <a href="pedro2/2.html">2</a>. <a href="pedro2/3.html">3</a>.
-</p><p>
-<a href="juan1">PRIMERA CARTA DE SAN JUAN</a><br>
-<a href="juan1/1.html">1</a>. <a href="juan1/2.html">2</a>. <a href="juan1/3.html">3</a>. <a href="juan1/4.html">4</a>. <a href="juan1/5.html">5</a>.
-</p><p>
-<a href="juan2">SEGUNDA CARTA DE SAN JUAN</a>
-</p><p>
-<a href="juan3">TERCERA CARTA DE SAN JUAN</a>
-</p><p>
-<a href="judas">CARTA DE SAN JUDAS</a>
-</p><p>
-<a href="apocalipsis">APOCALIPSIS</a><br>
-<a href="apocalipsis/1.html">1</a>. <a href="apocalipsis/2.html">2</a>. <a href="apocalipsis/3.html">3</a>. <a href="apocalipsis/4.html">4</a>. <a href="apocalipsis/5.html">5</a>. <a href="apocalipsis/6.html">6</a>. <a href="apocalipsis/7.html">7</a>. <a href="apocalipsis/8.html">8</a>. <a href="apocalipsis/9.html">9</a>. <a href="apocalipsis/10.html">10</a>. <a href="apocalipsis/11.html">11</a>. <a href="apocalipsis/12.html">12</a>. <a href="apocalipsis/13.html">13</a>. <a href="apocalipsis/14.html">14</a>. <a href="apocalipsis/15.html">15</a>. <a href="apocalipsis/16.html">16</a>. <a href="apocalipsis/17.html">17</a>. <a href="apocalipsis/18.html">18</a>. <a href="apocalipsis/19.html">19</a>. <a href="apocalipsis/20.html">20</a>. <a href="apocalipsis/21.html">21</a>. <a href="apocalipsis/22.html">22</a>.
-</p>
-<br>
-<!--
-<img src="img/Juan17.20-26.png" width="98%" border="2"/>
-<br><br>
-<center class="noneCel">
-<img src="../../jesus/SEÑOR-MIO-Y-DIOS-MIO.jpg" width="333"/>
-<br><br>
-<img src="img/transfiguracion.jpg" width="90%"/></a>
-<p><a href="https://es.wikipedia.org/wiki/Transfiguraci%C3%B3n_de_Jes%C3%BAs">La transfiguracion de nuestro SEÑOR JESUCRISTO</a></p>
-</center>
-<p class="noneCel"><a href="lucas/9.html">Evangelio según San Lucas 9, 28-36</a>
-<br>En estos pasajes, Jesús y tres de sus apóstoles, Pedro, Santiago y Juan se dirigen a una montaña (Monte Tabor o Monte de la Transfiguración) a orar. En la montaña, Jesús empieza a brillar con rayos brillantes de luz, generalmente llamada «luz tabórica». Entonces los profetas <u>Moisés</u> y <u>Elías</u> aparecen al lado de él y habla con ellos. Entonces Jesús es llamado "Hijo" por una voz en el cielo, que es Dios Padre, como en el Bautismo de Jesús.</p>
--->
-</div>
-
-<div class="item blanco">
-<center>
-<h3><a href="https://mebya.net/jc" style="text-decoration:none">Jesús Misericordioso</a></h3>
-<img src="Jesús Misericordioso.jpg" width="90%"/><br>
-<p><i>En Vos Confío</i></p>
-</center>
-<hr style="width:50%; margin: auto;" />
-<br>
-<center><p>Jeremías 17:7-8</center>
-<i>7 ¡Bendito el hombre que confía en el Señor y en él tiene puesta su confianza!</i>
-<br>
-8 El es como un árbol plantado al borde de las aguas, que extiende sus raíces hacia la corriente; no teme cuando llega el calor y su follaje se mantiene frondoso; no se inquieta en un año de sequía y nunca deja de dar fruto.
-</p><br>
-<center>
-<hr style="width:50%; margin: auto;" />
-<!--
-<br><br>
-<img src="img/jesus_es_el_señor.png" width="90%"/><br>
-<hr style="width:50%; margin: auto;" />
-<br>
-<a href="https://mebya.net/aleluya-y2"><img src="https://mebya.net/aleluya-y2/aleluya-icon.jpg" width="50%"/>
-<br>ALELUYA<br>
-Canal de YouTube</a><br>
-<hr style="width:50%; margin: auto;" />
-<br><br>
-      -->
-</center>
-<!-----
-<hr style="width:50%; margin: auto;" />
-<br>
-<img src="seba.jpg" width="90%"/>
-<p><i>En homenaje a mi querido Abuelo devoto de Jesús de la divina misericordia, que siempre leía la biblia debajo del mangal (árbol del mango).</i></p>
-<br>
-<hr style="width:50%; margin: auto;" />
-<br>
-<a href="https://mebya.net/"><img src="MEBYA.jpg" width="90%"/></a>
-<br><br>
-<hr style="width:50%; margin: auto;" />
-<br>
-
-<a href="https://mebya.net/mauri"><img src="https://mebya.net/Posadas.png" width="90%"></a>
----->
-<!---Este texto solo visible para escritorio--->
-<style>
-@media screen and (max-width: 980px) {
-.noneCel {
-display: none;
+        items.forEach(function(item) {
+            let titulo = item.getAttribute('data-title');
+            if (titulo.includes(input)) {
+                item.style.display = "block";
+            } else {
+                item.style.display = "none";
+            }
+        });
     }
-}
-</style>
-<!--
-<center class="noneCel">
-<hr style="width:50%; margin: auto;" />
-<br><img src="img/Salmo1.jpg" width="90%"/><br><br>
-<hr style="width:50%; margin: auto;" />
-<br><img src="img/Salmo104.jpg" width="90%"/><br><br>
-<hr style="width:50%; margin: auto;" />
-<br><img src="img/salmo22.png" width="90%"/><br><br>
-<hr style="width:50%; margin: auto;" />
-<br><img src="img/salmo33.jpg" width="90%"/><br><br>
-<hr style="width:50%; margin: auto;" />
-<br><img src="img/salmo39.png" width="90%"/><br><br>
-<hr style="width:50%; margin: auto;" />
-<br><img src="img/Morada.jpg" width="90%"/><br><br>
-<hr style="width:50%; margin: auto;" />
-<br><img src="img/Dios.jpg" width="90%"/><br><br>
-<hr style="width:50%; margin: auto;" /><br>
-<MARK class="mark"><b>&nbsp;&nbsp;&nbsp;Cómo seguir a Jesús&nbsp;&nbsp;&nbsp;</b></MARK><br>
-<a href="https://mebya.net/jc/seguir-a-jesus"><img src="../../jesus/Jesus_Morris.png" width="90%"></a>
-<br><br>
-<img src="../../jesus/01_A-todo-el-mundo.jpg" width="90%"/>
--->
-</center>
-</div>
-</div>
-<center>
-<hr style="width:50%; margin: auto;" />
-</center>
 
-<center>
-<p>Fuente: <a href="https://www.vatican.va/archive/ESL0506/_INDEX.HTM" target="_blank" style="text-decoration:none">www.vatican.va/archive/bible</a></p>
-<p>- 2022 -</p>
-</center>
-<!---Boton BN--->
-<style> .oscuro{ background-color: #1f1f1f; color: #f1eded; } </style>
-<script type="text/javascript"> 
-      function cambiarModo() { 
+    // Modo Oscuro / Claro
+    function cambiarModo() { 
         var cuerpoweb = document.body; 
         cuerpoweb.classList.toggle("oscuro"); 
-      } 
-    </script>
-<style> .claro { color: white } </style>
-<script type="text/javascript"> 
-      function cambiarColor() { 
-        var cuerpoweb = document.body; 
-        cuerpoweb.classList.toggle("claro"); 
-      } 
-    </script>
-<!---Botones fixed--->
-<!---Boton Cafecito---
-<h1><a href="https://cafecito.app/mebya" Target="_blank" style="display:scroll; position:fixed; bottom:10px; left:10px;"><img src="https://mebya.net/cafecito.png" width="50"></a></h1>
----Boton Claro/Oscuro---
-<img onclick="cambiarColor()"  style="display:scroll; position:fixed; bottom:15px; right:10px; border:5px outset silver;" src="https://mebya.net/jc/biblia/byn.png" width="40">
--->
-<!---Boton Claro/Oscuro texto--->
-<button onclick="cambiarModo()"  style="display:scroll; position:fixed; bottom:10px; right:10px;"><h3>B/N</button>
-<!---Botones fixed--->
-<!---Boton oraciones en video---
-<h1><a href="https://www.youtube.com/c/Oracionesenvideo" style="display:scroll; position:fixed; bottom:10px; left:75px;"><img src="img/oracionesenvideo.png" width="40" style=" opacity:.8;"></a></h1>
----Boton Google Play---
-<h1><a href="https://play.google.com/store/apps/details?id=biblia.catolica.sin.internet" style="display:scroll; position:fixed; bottom:10px; right:75px;"><img src="img/google-play.png" width="40" style=" opacity:.8;"></a></h1>
--->
+    }
+
+    // Alerta devocional
+    function mialerta() {  
+        Swal.fire('Antes del click en el botón es menester confiar en nuestro SEÑOR Jesucristo, diciendo con el ❤ :<br><br>¡JESÚS, EN VOS CONFÍO!')
+    } 
+
+    // Funciones aleatorias (Antiguo y Nuevo Testamento)
+    function at() {
+        const atBooks = ["genesis/1.html", "exodo/1.html", "levitico/1.html", "numeros/1.html", "deuteronomio/1.html", "josue/1.html", "jueces/1.html", "salmos/23.html", "proverbios/1.html"];
+        const random = Math.floor(Math.random() * atBooks.length);
+        window.location = atBooks[random];
+    }
+
+    function nt() {
+        const ntBooks = ["mateo/1.html", "marcos/1.html", "lucas/1.html", "juan/1.html", "hechos/1.html", "romanos/1.html", "apocalipsis/1.html"];
+        const random = Math.floor(Math.random() * ntBooks.length);
+        window.location = ntBooks[random];
+    }
+</script>
+
 </body>
 </html>
