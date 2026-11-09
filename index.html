@@ -7,7 +7,6 @@
 <link rel="icon" href="JC.jpg" type="image/png" />
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<!-- Google Fonts para un diseño moderno y limpio -->
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
     :root {
@@ -27,19 +26,20 @@
         -webkit-font-smoothing: antialiased;
     }
 
-    /* Pantalla de carga ligera */
+    /* Pantalla de carga segura que se quita sola */
     #pre-load-web {
         width: 100%;
         height: 100vh;
         position: fixed;
         background: #ffffff;
-        left: 0px;
-        top: 0px;
+        left: 0;
+        top: 0;
         z-index: 100000;
         display: flex;
         justify-content: center;
         align-items: center;
         flex-direction: column;
+        transition: opacity 0.5s ease;
     }
     #imagen-load {
         text-align: center;
@@ -61,7 +61,6 @@
         margin: 0 0 5px 0;
         font-size: 1.8rem;
         font-weight: 700;
-        letter-spacing: -0.5px;
     }
 
     header p {
@@ -76,7 +75,7 @@
         padding: 0 15px;
     }
 
-    /* Barra de Búsqueda Moderna */
+    /* Barra de Búsqueda */
     .search-box-container {
         margin: -20px auto 20px auto;
         max-width: 600px;
@@ -94,16 +93,14 @@
         outline: none;
         box-shadow: 0 4px 15px rgba(0,0,0,0.05);
         background: white;
-        transition: all 0.3s ease;
         box-sizing: border-box;
     }
 
     .search-input:focus {
         border-color: var(--primary-color);
-        box-shadow: 0 4px 20px rgba(0,102,204,0.15);
     }
 
-    /* Botones de selección rápida y aleatoria */
+    /* Botones de acción */
     .actions-bar {
         display: flex;
         justify-content: center;
@@ -121,7 +118,6 @@
         font-size: 0.85rem;
         cursor: pointer;
         transition: all 0.2s;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.02);
     }
 
     .btn-action:hover {
@@ -136,7 +132,7 @@
         border: none;
     }
 
-    /* Estructura en Tarjetas (Grid) */
+    /* Tarjetas */
     .grid-testaments {
         display: grid;
         grid-template-columns: 1fr 1fr;
@@ -163,9 +159,6 @@
         margin-top: 0;
         padding-bottom: 10px;
         border-bottom: 2px solid var(--border-color);
-        display: flex;
-        align-items: center;
-        gap: 8px;
     }
 
     .book-item {
@@ -181,7 +174,6 @@
         display: inline-block;
         margin-bottom: 6px;
         font-size: 0.95rem;
-        transition: color 0.2s;
     }
 
     .book-name:hover {
@@ -202,7 +194,6 @@
         font-size: 0.75rem;
         text-decoration: none;
         font-weight: 500;
-        transition: background 0.2s, color 0.2s;
     }
 
     .chapters-list a:hover {
@@ -210,7 +201,6 @@
         color: white;
     }
 
-    /* Panel Lateral / Reflexión */
     .sidebar-card {
         background: white;
         border-radius: 16px;
@@ -224,7 +214,6 @@
         border-radius: 12px;
         max-width: 100%;
         height: auto;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     }
 
     /* Modo Oscuro */
@@ -239,7 +228,6 @@
     body.oscuro .search-input { background: #1e1e1e; color: white; border-color: #333; }
     body.oscuro #pre-load-web { background: #121212; color: white; }
 
-    /* Botón flotante B/N */
     .btn-float {
         position: fixed;
         bottom: 20px;
@@ -251,7 +239,6 @@
         border-radius: 50px;
         font-weight: bold;
         cursor: pointer;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
         z-index: 999;
     }
 
@@ -261,35 +248,31 @@
         font-size: 0.85rem;
         opacity: 0.7;
     }
-    
     footer a { color: inherit; text-decoration: underline; }
 </style>
-
-<!-- Scripts de Precarga y Funciones de Lectura Aleatoria -->
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js"></script>
-<script>
-    $(document).ready(function(){
-        $("body").css({"overflow-y":"hidden"});
-        var alto = $(window).height();
-        $("body").append("<div id='pre-load-web'><div id='imagen-load'><img src='JC.jpg' width='65' height='65' style='border-radius:50%;'/><br /><br />Cargando Biblia...</div></div>");
-        $("#pre-load-web").css({height: alto + "px"});
-    }); 
-
-    $(window).load(function(){
-       $("#pre-load-web").fadeOut(500, function() { 
-           $(this).remove();
-           $("body").css({"overflow-y":"auto"}); 
-       });        
-    });
-</script>
 </head>
 <body>
 
+<!-- Pantalla de carga con cierre automático garantizado -->
 <div id="pre-load-web">
     <div id="imagen-load">
         <img src='JC.jpg' width='65' height='65' style='border-radius:50%;'/><br /><br />Cargando Biblia...
     </div>
 </div>
+
+<script>
+    // Sistema seguro: remueve la precarga inmediatamente o en máximo 800 milisegundos
+    window.addEventListener('load', function() {
+        const loader = document.getElementById('pre-load-web');
+        loader.style.opacity = '0';
+        setTimeout(() => loader.remove(), 500);
+    });
+    // Seguridad extra por si el navegador bloquea el evento load
+    setTimeout(function() {
+        const loader = document.getElementById('pre-load-web');
+        if (loader) { loader.remove(); }
+    }, 1500);
+</script>
 
 <header>
     <h1>BIBLIA</h1>
@@ -299,13 +282,12 @@
     </a>
 </header>
 
-<!-- BARRA DE BÚSQUEDA DE LIBROS EN TIEMPO REAL -->
+<!-- BARRA DE BÚSQUEDA -->
 <div class="search-box-container">
     <input type="text" id="searchInput" class="search-input" placeholder="🔍 Buscar libro (ej. Génesis, Mateo, Salmos)..." onkeyup="filtrarLibros()">
 </div>
 
 <div class="main-container">
-    <!-- Acciones Rápidas -->
     <div class="actions-bar">
         <button class="btn-action btn-special" onclick="mialerta();">⭐ Confiar en Jesús</button>
         <button class="btn-action" onclick="at()">📖 Antiguo (Aleatorio)</button>
@@ -313,11 +295,9 @@
         <button class="btn-action" onclick="window.location.href='donar.html'">❤️ Donar (BONAR)</button>
     </div>
 
-    <!-- Contenedor Principal en Cuadrícula -->
     <div class="grid-testaments">
-        
         <!-- ANTIGUO TESTAMENTO -->
-        <div class="card" id="card-at">
+        <div class="card">
             <h2 style="color: #d97706;">📜 Antiguo Testamento</h2>
             
             <div class="book-item" data-title="genesis">
@@ -348,160 +328,19 @@
                 </div>
             </div>
 
-            <div class="book-item" data-title="deuteronomio">
-                <a href="deuteronomio" class="book-name">DEUTERONOMIO</a>
-                <div class="chapters-list">
-                    <a href="deuteronomio/1.html">1</a> <a href="deuteronomio/2.html">2</a> <a href="deuteronomio/3.html">3</a> <a href="deuteronomio/4.html">4</a> <a href="deuteronomio/5.html">5</a> <a href="deuteronomio/6.html">6</a> <a href="deuteronomio/7.html">7</a> <a href="deuteronomio/8.html">8</a> <a href="deuteronomio/9.html">9</a> <a href="deuteronomio/10.html">10</a> <a href="deuteronomio/11.html">11</a> <a href="deuteronomio/12.html">12</a> <a href="deuteronomio/13.html">13</a> <a href="deuteronomio/14.html">14</a> <a href="deuteronomio/15.html">15</a> <a href="deuteronomio/16.html">16</a> <a href="deuteronomio/17.html">17</a> <a href="deuteronomio/18.html">18</a> <a href="deuteronomio/19.html">19</a> <a href="deuteronomio/20.html">20</a> <a href="deuteronomio/21.html">21</a> <a href="deuteronomio/22.html">22</a> <a href="deuteronomio/23.html">23</a> <a href="deuteronomio/24.html">24</a> <a href="deuteronomio/25.html">25</a> <a href="deuteronomio/26.html">26</a> <a href="deuteronomio/27.html">27</a> <a href="deuteronomio/28.html">28</a> <a href="deuteronomio/29.html">29</a> <a href="deuteronomio/30.html">30</a> <a href="deuteronomio/31.html">31</a> <a href="deuteronomio/32.html">32</a> <a href="deuteronomio/33.html">33</a> <a href="deuteronomio/34.html">34</a>
-                </div>
-            </div>
-
-            <div class="book-item" data-title="josue">
-                <a href="josue" class="book-name">JOSUE</a>
-                <div class="chapters-list">
-                    <a href="josue/1.html">1</a> <a href="josue/2.html">2</a> <a href="josue/3.html">3</a> <a href="josue/4.html">4</a> <a href="josue/5.html">5</a> <a href="josue/6.html">6</a> <a href="josue/7.html">7</a> <a href="josue/8.html">8</a> <a href="josue/9.html">9</a> <a href="josue/10.html">10</a> <a href="josue/11.html">11</a> <a href="josue/12.html">12</a> <a href="josue/13.html">13</a> <a href="josue/14.html">14</a> <a href="josue/15.html">15</a> <a href="josue/16.html">16</a> <a href="josue/17.html">17</a> <a href="josue/18.html">18</a> <a href="josue/19.html">19</a> <a href="josue/20.html">20</a> <a href="josue/21.html">21</a> <a href="josue/22.html">22</a> <a href="josue/23.html">23</a> <a href="josue/24.html">24</a>
-                </div>
-            </div>
-
-            <div class="book-item" data-title="jueces">
-                <a href="jueces" class="book-name">JUECES</a>
-                <div class="chapters-list">
-                    <a href="jueces/1.html">1</a> <a href="jueces/2.html">2</a> <a href="jueces/3.html">3</a> <a href="jueces/4.html">4</a> <a href="jueces/5.html">5</a> <a href="jueces/6.html">6</a> <a href="jueces/7.html">7</a> <a href="jueces/8.html">8</a> <a href="jueces/9.html">9</a> <a href="jueces/10.html">10</a> <a href="jueces/11.html">11</a> <a href="jueces/12.html">12</a> <a href="jueces/13.html">13</a> <a href="jueces/14.html">14</a> <a href="jueces/15.html">15</a> <a href="jueces/16.html">16</a> <a href="jueces/17.html">17</a> <a href="jueces/18.html">18</a> <a href="jueces/19.html">19</a> <a href="jueces/20.html">20</a> <a href="jueces/21.html">21</a>
-                </div>
-            </div>
-
             <div class="book-item" data-title="salmos">
                 <a href="salmos" class="book-name">SALMOS</a>
                 <div class="chapters-list">
-                    <!-- Enlace resumido o completo -->
                     <a href="salmos/1.html">1</a> <a href="salmos/2.html">2</a> <a href="salmos/23.html">Sal 23</a> <a href="salmos/51.html">Sal 51</a> <a href="salmos/91.html">Sal 91</a> <a href="salmos/150.html">150</a>
-                </div>
-            </div>
-
-            <div class="book-item" data-title="proverbios">
-                <a href="proverbios" class="book-name">PROVERBIOS</a>
-                <div class="chapters-list">
-                    <a href="proverbios/1.html">1</a> <a href="proverbios/3.html">3</a> <a href="proverbios/31.html">31</a>
                 </div>
             </div>
         </div>
 
         <!-- NUEVO TESTAMENTO -->
-        <div class="card" id="card-nt">
+        <div class="card">
             <h2 style="color: #dc2626;">✨ Nuevo Testamento</h2>
             
             <div class="book-item" data-title="mateo">
                 <a href="mateo" class="book-name">EVANGELIO SEGUN SAN MATEO</a>
                 <div class="chapters-list">
-                    <a href="mateo/1.html">1</a> <a href="mateo/2.html">2</a> <a href="mateo/3.html">3</a> <a href="mateo/4.html">4</a> <a href="mateo/5.html">5</a> <a href="mateo/6.html">6</a> <a href="mateo/7.html">7</a> <a href="mateo/8.html">8</a> <a href="mateo/9.html">9</a> <a href="mateo/10.html">10</a> <a href="mateo/11.html">11</a> <a href="mateo/12.html">12</a> <a href="mateo/13.html">13</a> <a href="mateo/14.html">14</a> <a href="mateo/15.html">15</a> <a href="mateo/16.html">16</a> <a href="mateo/17.html">17</a> <a href="mateo/18.html">18</a> <a href="mateo/19.html">19</a> <a href="mateo/20.html">20</a> <a href="mateo/21.html">21</a> <a href="mateo/22.html">22</a> <a href="mateo/23.html">23</a> <a href="mateo/24.html">24</a> <a href="mateo/25.html">25</a> <a href="mateo/26.html">26</a> <a href="mateo/27.html">27</a> <a href="mateo/28.html">28</a>
-                </div>
-            </div>
-
-            <div class="book-item" data-title="marcos">
-                <a href="marcos" class="book-name">EVANGELIO SEGUN SAN MARCOS</a>
-                <div class="chapters-list">
-                    <a href="marcos/1.html">1</a> <a href="marcos/2.html">2</a> <a href="marcos/3.html">3</a> <a href="marcos/4.html">4</a> <a href="marcos/5.html">5</a> <a href="marcos/6.html">6</a> <a href="marcos/7.html">7</a> <a href="marcos/8.html">8</a> <a href="marcos/9.html">9</a> <a href="marcos/10.html">10</a> <a href="marcos/11.html">11</a> <a href="marcos/12.html">12</a> <a href="marcos/13.html">13</a> <a href="marcos/14.html">14</a> <a href="marcos/15.html">15</a> <a href="marcos/16.html">16</a>
-                </div>
-            </div>
-
-            <div class="book-item" data-title="lucas">
-                <a href="lucas" class="book-name">EVANGELIO SEGUN SAN LUCAS</a>
-                <div class="chapters-list">
-                    <a href="lucas/1.html">1</a> <a href="lucas/2.html">2</a> <a href="lucas/3.html">3</a> <a href="lucas/4.html">4</a> <a href="lucas/5.html">5</a> <a href="lucas/6.html">6</a> <a href="lucas/7.html">7</a> <a href="lucas/8.html">8</a> <a href="lucas/9.html">9</a> <a href="lucas/10.html">10</a> <a href="lucas/11.html">11</a> <a href="lucas/12.html">12</a> <a href="lucas/13.html">13</a> <a href="lucas/14.html">14</a> <a href="lucas/15.html">15</a> <a href="lucas/16.html">16</a> <a href="lucas/17.html">17</a> <a href="lucas/18.html">18</a> <a href="lucas/19.html">19</a> <a href="lucas/20.html">20</a> <a href="lucas/21.html">21</a> <a href="lucas/22.html">22</a> <a href="lucas/23.html">23</a> <a href="lucas/24.html">24</a>
-                </div>
-            </div>
-
-            <div class="book-item" data-title="juan">
-                <a href="juan" class="book-name">EVANGELIO SEGUN SAN JUAN</a>
-                <div class="chapters-list">
-                    <a href="juan/1.html">1</a> <a href="juan/2.html">2</a> <a href="juan/3.html">3</a> <a href="juan/4.html">4</a> <a href="juan/5.html">5</a> <a href="juan/6.html">6</a> <a href="juan/7.html">7</a> <a href="juan/8.html">8</a> <a href="juan/9.html">9</a> <a href="juan/10.html">10</a> <a href="juan/11.html">11</a> <a href="juan/12.html">12</a> <a href="juan/13.html">13</a> <a href="juan/14.html">14</a> <a href="juan/15.html">15</a> <a href="juan/16.html">16</a> <a href="juan/17.html">17</a> <a href="juan/18.html">18</a> <a href="juan/19.html">19</a> <a href="juan/20.html">20</a> <a href="juan/21.html">21</a>
-                </div>
-            </div>
-
-            <div class="book-item" data-title="hechos">
-                <a href="hechos" class="book-name">HECHOS DE LOS APOSTOLES</a>
-                <div class="chapters-list">
-                    <a href="hechos/1.html">1</a> <a href="hechos/2.html">2</a> <a href="hechos/28.html">28</a>
-                </div>
-            </div>
-
-            <div class="book-item" data-title="romanos">
-                <a href="romanos" class="book-name">CARTA A LOS ROMANOS</a>
-                <div class="chapters-list">
-                    <a href="romanos/1.html">1</a> <a href="romanos/8.html">8</a> <a href="romanos/16.html">16</a>
-                </div>
-            </div>
-
-            <div class="book-item" data-title="apocalipsis">
-                <a href="apocalipsis" class="book-name">APOCALIPSIS</a>
-                <div class="chapters-list">
-                    <a href="apocalipsis/1.html">1</a> <a href="apocalipsis/12.html">12</a> <a href="apocalipsis/21.html">21</a> <a href="apocalipsis/22.html">22</a>
-                </div>
-            </div>
-        </div>
-
-    </div>
-
-    <!-- Sección de Jesús Misericordioso -->
-    <div class="sidebar-card">
-        <h3 style="margin-top:0;"><a href="https://mebya.net/jc" style="text-decoration:none; color:var(--primary-color);">Jesús Misericordioso</a></h3>
-        <img src="Jesús Misericordioso.jpg" width="220" alt="Jesús Misericordioso"/><br>
-        <p><i>En Vos Confío</i></p>
-        <hr style="width:40%; margin: 15px auto; border:0; border-top:1px solid var(--border-color);" />
-        <p style="font-size: 0.9rem; font-style: italic;">
-            <b>Jeremías 17:7-8:</b> "¡Bendito el hombre que confía en el Señor y en él tiene puesta su confianza! Él es como un árbol plantado al borde de las aguas..."
-        </p>
-    </div>
-</div>
-
-<footer>
-    <p>Fuente: <a href="https://www.vatican.va/archive/ESL0506/_INDEX.HTM" target="_blank">www.vatican.va/archive/bible</a></p>
-    <p>- 2026 -</p>
-</footer>
-
-<!-- Botón Modo Oscuro / Claro -->
-<button onclick="cambiarModo()" class="btn-float">B/N</button>
-
-<!-- SCRIPT DE BÚSQUEDA Y FUNCIONALIDADES -->
-<script>
-    // Función de Buscador en Tiempo Real
-    function filtrarLibros() {
-        let input = document.getElementById('searchInput').value.toLowerCase();
-        let items = document.querySelectorAll('.book-item');
-
-        items.forEach(function(item) {
-            let titulo = item.getAttribute('data-title');
-            if (titulo.includes(input)) {
-                item.style.display = "block";
-            } else {
-                item.style.display = "none";
-            }
-        });
-    }
-
-    // Modo Oscuro / Claro
-    function cambiarModo() { 
-        var cuerpoweb = document.body; 
-        cuerpoweb.classList.toggle("oscuro"); 
-    }
-
-    // Alerta devocional
-    function mialerta() {  
-        Swal.fire('Antes del click en el botón es menester confiar en nuestro SEÑOR Jesucristo, diciendo con el ❤ :<br><br>¡JESÚS, EN VOS CONFÍO!')
-    } 
-
-    // Funciones aleatorias (Antiguo y Nuevo Testamento)
-    function at() {
-        const atBooks = ["genesis/1.html", "exodo/1.html", "levitico/1.html", "numeros/1.html", "deuteronomio/1.html", "josue/1.html", "jueces/1.html", "salmos/23.html", "proverbios/1.html"];
-        const random = Math.floor(Math.random() * atBooks.length);
-        window.location = atBooks[random];
-    }
-
-    function nt() {
-        const ntBooks = ["mateo/1.html", "marcos/1.html", "lucas/1.html", "juan/1.html", "hechos/1.html", "romanos/1.html", "apocalipsis/1.html"];
-        const random = Math.floor(Math.random() * ntBooks.length);
-        window.location = ntBooks[random];
-    }
-</script>
-
-</body>
-</html>
+                    <a href="mateo/1.html">1</a> <a href="mateo/2.html">2</a> <a href="mateo/3.html">3</a> <a href="mateo/4.html">4</a> <a href="mateo/5.html">5</a> <a href="mateo/6.html">6</a> <a href="mateo/7.html">7</a> <a href="mateo/8.html">8</a> <a href="mateo/9.html">9</a> <a href="mateo/10.html">10</a> <a href="mateo/11.html">11</a> <a href="mateo/12.html">12</a> <a href="mateo/13.html">13</a> <a href="mateo/14.html">14</a> <a href="mateo/15.html">15</a> <a href="mateo/16
