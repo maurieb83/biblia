@@ -267,7 +267,26 @@ https://paypal.me/mauricioeb83
 </p><p>
 USDT/USDC a esta dirección (Red: BEP20):
 <br>
-0xdcB0a1585E5e447aC02c2cC4ebA599Ff0ae8fa48
+<span id="numero">0xdcB0...ae8fa48</span>
+<button type="button" onclick="copiarNumero()">Copiar</button>
+<span id="mensaje" aria-live="polite"></span>
+
+<script>
+  async function copiarNumero() {
+    const numeroCompleto = "0xdcB0a1585E5e447aC02c2cC4ebA599Ff0ae8fa48";
+
+    try {
+      await navigator.clipboard.writeText(numeroCompleto);
+      document.getElementById("mensaje").textContent = " Copiado";
+    } catch {
+      document.getElementById("mensaje").textContent =
+        " No se pudo copiar automáticamente";
+    }
+  }
+</script>
+
+<br>
+<!--0xdcB0a1585E5e447aC02c2cC4ebA599Ff0ae8fa48-->
 </p><p>
 https://ar.lemon.me/$mauricioeb83
 </center>
